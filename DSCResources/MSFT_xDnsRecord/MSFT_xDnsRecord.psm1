@@ -28,7 +28,7 @@ function Get-TargetResource
         $Zone,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet("ARecord", "CName", "PTR")]
+        [ValidateSet("ARecord", "CName", "Ptr")]
         [System.String]
         $Type,
 
@@ -95,7 +95,7 @@ function Set-TargetResource
         $Zone,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet("ARecord", "CName", "PTR")]
+        [ValidateSet("ARecord", "CName", "Ptr")]
         [System.String]
         $Type,
 
@@ -173,7 +173,7 @@ function Test-TargetResource
         $Zone,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet("ARecord", "CName", "PTR")]
+        [ValidateSet("ARecord", "CName", "Ptr")]
         [System.String]
         $Type,
 
