@@ -173,7 +173,7 @@ function Test-TargetResource
         $Zone,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet("ARecord", "CName", "Ptr")]
+        [ValidateSet("ARecord", "CName", "PTR")]
         [System.String]
         $Type,
 
