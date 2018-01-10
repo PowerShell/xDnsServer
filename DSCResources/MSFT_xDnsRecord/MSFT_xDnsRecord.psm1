@@ -28,7 +28,7 @@ function Get-TargetResource
         $Zone,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet("ARecord", "CName")]
+        [ValidateSet("ARecord", "CName", "PTR")]
         [System.String]
         $Type,
 
@@ -67,6 +67,10 @@ function Get-TargetResource
     {
         $recordData = $record.RecordData.IPv4address.IPAddressToString
     }
+    if ($Type -eq "PTR") 
+    {
+        $recordData = ($record.RecordData.PtrDomainName).TrimEnd('.')
+    }
 
     return @{
         Name = $record.HostName;
@@ -91,7 +95,7 @@ function Set-TargetResource
         $Zone,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet("ARecord", "CName")]
+        [ValidateSet("ARecord", "CName", "PTR")]
         [System.String]
         $Type,
 
@@ -123,6 +127,11 @@ function Set-TargetResource
             $DNSParameters.Add('CName',$true)
             $DNSParameters.Add('HostNameAlias',$Target)
         }
+        if ($Type -eq "PTR")
+        {
+            $DNSParameters.Add('Ptr',$true)
+            $DNSParameters.Add('PtrDomainName',$Target)
+        }
 
         Write-Verbose -Message ($LocalizedData.CreatingDnsRecordMessage -f $Type, $Target, $Zone, $DnsServer)
         Add-DnsServerResourceRecord @DNSParameters
@@ -139,6 +148,10 @@ function Set-TargetResource
         if ($Type -eq "CName")
         {
             $DNSParameters.Add('RRType','CName')
+        }
+        if ($Type -eq "PTR")
+        {
+            $DNSParameters.Add('RRType','Ptr')
         }
         Write-Verbose -Message ($LocalizedData.RemovingDnsRecordMessage -f $Type, $Target, $Zone, $DnsServer)
         Remove-DnsServerResourceRecord @DNSParameters
@@ -160,7 +173,7 @@ function Test-TargetResource
         $Zone,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet("ARecord", "CName")]
+        [ValidateSet("ARecord", "CName", "Ptr")]
         [System.String]
         $Type,
 
