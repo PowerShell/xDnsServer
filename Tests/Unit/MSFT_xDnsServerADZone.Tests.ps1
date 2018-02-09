@@ -29,6 +29,8 @@ try
         $testZoneName = 'example.com';
         $testDynamicUpdate = 'Secure';
         $testReplicationScope = 'Domain';
+        $testComputerName = 'dnsserver.local';
+        $testCredential = New-Object System.Management.Automation.PSCredential 'DummyUser', (ConvertTo-SecureString 'DummyPassword' -AsPlainText -Force);
         $testDirectoryPartitionName = "DomainDnsZones.$testZoneName";
         $testParams = @{ Name = $testZoneName; }
 
@@ -48,13 +50,6 @@ try
             ReplicationScope = $testReplicationScope;
             DirectoryPartitionName = $testDirectoryPartitionName;
             Ensure = 'Present'
-            CimSession = @{
-                Id = 1
-                Name = 'CimSession1'
-                InstanceId = 'a23d4d49-f588-407d-9b78-601cd74d8116'
-                ComputerName = 'localhost'
-                Protocol = 'WSMAN'
-            }
         }
 
         $fakeAbsentTargetResource = @{ Ensure = 'Absent' }
@@ -96,6 +91,60 @@ try
                 Mock -CommandName Get-DnsServerZone -MockWith { }
                 $targetResource = Get-TargetResource @testParams -ReplicationScope $testReplicationScope -Ensure Absent;
                 $targetResource.Ensure | Should Be 'Absent';
+            }
+
+            Context 'When a computername is not passed' {
+                It 'Should not call New-CimSession' {
+                    Mock -CommandName New-CimSession -MockWith { }
+                    Get-TargetResource @testParams -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName New-CimSession -Scope It -Times 0 -Exactly;
+                }
+
+                It 'Should not call Remove-CimSession' {
+                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Get-TargetResource @testParams -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 0 -Exactly;
+                }
+
+                Context 'When credential is passed' {
+                    It 'Should throw an exception indicating a computername must also be passed' {
+                        $withCredentialsParameter = $testParams + @{
+                            Credential = $testCredential
+                        }
+                        { Get-TargetResource @withCredentialsParameter -ReplicationScope $testReplicationScope } | Should -Throw 
+                    }
+                }
+            }
+
+            Context 'When a computername is passed' {
+                It 'Should call New-CimSession' {
+                    $withComputerNameParameter = $testParams + @{
+                        ComputerName = $testComputerName
+                    }
+                    Mock -CommandName New-CimSession -MockWith { }
+                    Get-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withComputerNameParameter.ComputerName } -Scope It -Times 1 -Exactly;
+                }
+                It 'Should call Remove-CimSession' {
+                    $withComputerNameParameter = $testParams + @{
+                        ComputerName = $testComputerName
+                    }
+                    Mock -CommandName New-CimSession -MockWith { New-MockObject -Type Microsoft.Management.Infrastructure.CimSession }
+                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Get-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 1 -Exactly;
+                }
+                Context 'When credentials are passed' {
+                    It 'Should throw an exception indicating a computername must also be passed' {
+                        $withCredentialsAndComputerParameter = $testParams + @{
+                            ComputerName = $testComputerName
+                            Credential = $testCredential
+                        }
+                        Mock -CommandName New-CimSession -MockWith { }
+                        Get-TargetResource @withCredentialsAndComputerParameter -ReplicationScope $testReplicationScope;
+                        Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withCredentialsAndComputerParameter.ComputerName -and $credential -eq $withCredentialsAndComputerParameter.Credential } -Scope It -Times 1 -Exactly;
+                    }
+                }
             }
         }
         #endregion
@@ -209,6 +258,56 @@ try
                 Mock -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DirectoryPartitionName -eq 'IncorrectDirectoryPartitionName' } -MockWith { }
                 Set-TargetResource @testParams -Ensure Present -ReplicationScope $testReplicationScope -DirectoryPartitionName 'IncorrectDirectoryPartitionName';
                 Assert-MockCalled -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DirectoryPartitionName -eq 'IncorrectDirectoryPartitionName' } -Scope It;
+            }
+
+            Context 'When a computername is not passed' {
+                It 'Should not call New-CimSession' {
+                    Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource; }
+                    Mock -CommandName New-CimSession -MockWith { }
+                    Set-TargetResource @testParams -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName New-CimSession -Scope It -Times 0 -Exactly;
+                }
+
+                It 'Should not call Remove-CimSession' {
+                    Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource; }
+                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Set-TargetResource @testParams -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 0 -Exactly;
+                }
+            }
+
+            Context 'When a computername is passed' {
+                It 'Should call New-CimSession' {
+                    $withComputerNameParameter = $testParams + @{
+                        ComputerName = $testComputerName
+                    }
+                    Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource; }
+                    Mock -CommandName New-CimSession -MockWith { }
+                    Set-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withComputerNameParameter.ComputerName } -Scope It -Times 1 -Exactly;
+                }
+                It 'Should call Remove-CimSession' {
+                    $withComputerNameParameter = $testParams + @{
+                        ComputerName = $testComputerName
+                    }
+                    Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource; }
+                    Mock -CommandName New-CimSession -MockWith { New-MockObject -Type Microsoft.Management.Infrastructure.CimSession }
+                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Set-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope;
+                    Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 1 -Exactly;
+                }
+                Context 'When credentials are passed' {
+                    It 'Should throw an exception indicating a computername must also be passed' {
+                        $withCredentialsAndComputerParameter = $testParams + @{
+                            ComputerName = $testComputerName
+                            Credential = $testCredential
+                        }
+                        Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource; }
+                        Mock -CommandName New-CimSession -MockWith { }
+                        Set-TargetResource @withCredentialsAndComputerParameter -ReplicationScope $testReplicationScope;
+                        Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withCredentialsAndComputerParameter.ComputerName -and $credential -eq $withCredentialsAndComputerParameter.Credential } -Scope It -Times 1 -Exactly;
+                    }
+                }
             }
         }
         #endregion
