@@ -59,7 +59,7 @@ try
         Describe "$($Global:DSCResourceName)\Get-TargetResource" {
             function Get-DnsServerZone { }
 
-            Mock -CommandName 'Assert-Module' -MockWith { }
+            Mock -CommandName 'Assert-Module'
 
             It 'Returns a "System.Collections.Hashtable" object type with schema properties' {
                 $targetResource = Get-TargetResource @testParams -ReplicationScope $testReplicationScope
@@ -76,7 +76,7 @@ try
             }
 
             It 'Returns "Absent" when DNS zone does not exists and "Ensure" = "Present"' {
-                Mock -CommandName Get-DnsServerZone -MockWith { }
+                Mock -CommandName Get-DnsServerZone
                 $targetResource = Get-TargetResource @testParams -ReplicationScope $testReplicationScope
                 $targetResource.Ensure | Should Be 'Absent'
             }
@@ -88,20 +88,20 @@ try
             }
 
             It 'Returns "Absent" when DNS zone does not exist and "Ensure" = "Absent"' {
-                Mock -CommandName Get-DnsServerZone -MockWith { }
+                Mock -CommandName Get-DnsServerZone
                 $targetResource = Get-TargetResource @testParams -ReplicationScope $testReplicationScope -Ensure Absent
                 $targetResource.Ensure | Should Be 'Absent'
             }
 
             Context 'When a computername is not passed' {
                 It 'Should not call New-CimSession' {
-                    Mock -CommandName New-CimSession -MockWith { }
+                    Mock -CommandName New-CimSession
                     Get-TargetResource @testParams -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName New-CimSession -Scope It -Times 0 -Exactly
                 }
 
                 It 'Should not call Remove-CimSession' {
-                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Mock -CommandName Remove-CimSession
                     Get-TargetResource @testParams -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 0 -Exactly
                 }
@@ -121,7 +121,7 @@ try
                     $withComputerNameParameter = $testParams + @{
                         ComputerName = $testComputerName
                     }
-                    Mock -CommandName New-CimSession -MockWith { }
+                    Mock -CommandName New-CimSession
                     Get-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withComputerNameParameter.ComputerName } -Scope It -Times 1 -Exactly
                 }
@@ -130,7 +130,7 @@ try
                         ComputerName = $testComputerName
                     }
                     Mock -CommandName New-CimSession -MockWith { New-MockObject -Type Microsoft.Management.Infrastructure.CimSession }
-                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Mock -CommandName Remove-CimSession
                     Get-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 1 -Exactly
                 }
@@ -140,7 +140,7 @@ try
                             ComputerName = $testComputerName
                             Credential = $testCredential
                         }
-                        Mock -CommandName New-CimSession -MockWith { }
+                        Mock -CommandName New-CimSession
                         Get-TargetResource @withCredentialsAndComputerParameter -ReplicationScope $testReplicationScope
                         Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withCredentialsAndComputerParameter.ComputerName -and $credential -eq $withCredentialsAndComputerParameter.Credential } -Scope It -Times 1 -Exactly
                     }
@@ -166,7 +166,7 @@ try
             }
 
             It 'Passes when DNS zone does not exist and "Ensure" = "Absent"' {
-                Mock -CommandName Get-TargetResource -MockWith {  }
+                Mock -CommandName Get-TargetResource
                 Test-TargetResource @testParams -Ensure Absent -ReplicationScope $testReplicationScope | Should Be $true
             }
 
@@ -191,7 +191,7 @@ try
             }
 
             It 'Fails when DNS zone does not exist and "Ensure" = "Present"' {
-                Mock -CommandName Get-TargetResource -MockWith { }
+                Mock -CommandName Get-TargetResource
                 Test-TargetResource @testParams -Ensure Present -ReplicationScope $testReplicationScope | Should Be $false
             }
 
@@ -227,35 +227,35 @@ try
 
             It 'Calls "Add-DnsServerPrimaryZone" when DNS zone does not exist and "Ensure" = "Present"' {
                 Mock -CommandName Get-TargetResource -MockWith { return $fakeAbsentTargetResource }
-                Mock -CommandName Add-DnsServerPrimaryZone -ParameterFilter { $Name -eq $testZoneName } -MockWith { }
+                Mock -CommandName Add-DnsServerPrimaryZone -ParameterFilter { $Name -eq $testZoneName }
                 Set-TargetResource @testParams -Ensure Present -ReplicationScope $testReplicationScope -DynamicUpdate $testDynamicUpdate
                 Assert-MockCalled -CommandName Add-DnsServerPrimaryZone -ParameterFilter { $Name -eq $testZoneName } -Scope It
             }
 
             It 'Calls "Remove-DnsServerZone" when DNS zone does exist and "Ensure" = "Absent"' {
                 Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                Mock -CommandName Remove-DnsServerZone -MockWith { }
+                Mock -CommandName Remove-DnsServerZone
                 Set-TargetResource @testParams -Ensure Absent -ReplicationScope $testReplicationScope -DynamicUpdate $testDynamicUpdate
                 Assert-MockCalled -CommandName Remove-DnsServerZone -Scope It
             }
 
             It 'Calls "Set-DnsServerPrimaryZone" when DNS zone "DynamicUpdate" is incorrect' {
                 Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                Mock -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DynamicUpdate -eq 'NonsecureAndSecure' } -MockWith { }
+                Mock -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DynamicUpdate -eq 'NonsecureAndSecure' }
                 Set-TargetResource @testParams -Ensure Present -ReplicationScope $testReplicationScope -DynamicUpdate 'NonsecureAndSecure'
                 Assert-MockCalled -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DynamicUpdate -eq 'NonsecureAndSecure' } -Scope It
             }
 
             It 'Calls "Set-DnsServerPrimaryZone" when DNS zone "ReplicationScope" is incorrect' {
                 Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                Mock -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $ReplicationScope -eq 'Forest' } -MockWith { }
+                Mock -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $ReplicationScope -eq 'Forest' }
                 Set-TargetResource @testParams -Ensure Present -ReplicationScope 'Forest'
                 Assert-MockCalled -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $ReplicationScope -eq 'Forest' } -Scope It
             }
 
             It 'Calls "Set-DnsServerPrimaryZone" when DNS zone "DirectoryPartitionName" is incorrect' {
                 Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                Mock -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DirectoryPartitionName -eq 'IncorrectDirectoryPartitionName' } -MockWith { }
+                Mock -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DirectoryPartitionName -eq 'IncorrectDirectoryPartitionName' }
                 Set-TargetResource @testParams -Ensure Present -ReplicationScope $testReplicationScope -DirectoryPartitionName 'IncorrectDirectoryPartitionName'
                 Assert-MockCalled -CommandName Set-DnsServerPrimaryZone -ParameterFilter { $DirectoryPartitionName -eq 'IncorrectDirectoryPartitionName' } -Scope It
             }
@@ -263,14 +263,14 @@ try
             Context 'When a computername is not passed' {
                 It 'Should not call New-CimSession' {
                     Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                    Mock -CommandName New-CimSession -MockWith { }
+                    Mock -CommandName New-CimSession
                     Set-TargetResource @testParams -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName New-CimSession -Scope It -Times 0 -Exactly
                 }
 
                 It 'Should not call Remove-CimSession' {
                     Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Mock -CommandName Remove-CimSession
                     Set-TargetResource @testParams -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 0 -Exactly
                 }
@@ -282,7 +282,7 @@ try
                         ComputerName = $testComputerName
                     }
                     Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                    Mock -CommandName New-CimSession -MockWith { }
+                    Mock -CommandName New-CimSession
                     Set-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withComputerNameParameter.ComputerName } -Scope It -Times 1 -Exactly
                 }
@@ -292,7 +292,7 @@ try
                     }
                     Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
                     Mock -CommandName New-CimSession -MockWith { New-MockObject -Type Microsoft.Management.Infrastructure.CimSession }
-                    Mock -CommandName Remove-CimSession -MockWith { }
+                    Mock -CommandName Remove-CimSession
                     Set-TargetResource @withComputerNameParameter -ReplicationScope $testReplicationScope
                     Assert-MockCalled -CommandName Remove-CimSession -Scope It -Times 1 -Exactly
                 }
@@ -303,7 +303,7 @@ try
                             Credential = $testCredential
                         }
                         Mock -CommandName Get-TargetResource -MockWith { return $fakePresentTargetResource }
-                        Mock -CommandName New-CimSession -MockWith { }
+                        Mock -CommandName New-CimSession
                         Set-TargetResource @withCredentialsAndComputerParameter -ReplicationScope $testReplicationScope
                         Assert-MockCalled -CommandName New-CimSession -ParameterFilter { $computername -eq $withCredentialsAndComputerParameter.ComputerName -and $credential -eq $withCredentialsAndComputerParameter.Credential } -Scope It -Times 1 -Exactly
                     }
