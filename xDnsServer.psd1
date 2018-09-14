@@ -47,21 +47,22 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '* Changes to xDnsServer
-  * Updated appveyor.yml to use the default template and add CodeCov support
-    ([issue 73](https://github.com/PowerShell/xActiveDirectory/issues/73)).
-  * Adding a Branches section to the README.md with Codecov badges for both
-    master and dev branch ([issue 73](https://github.com/PowerShell/xActiveDirectory/issues/73)).
-  * Updated description of resource module in README.md.
-* Added resource xDnsServerZoneAging. [Claudio Spizzi (@claudiospizzi)](https://github.com/claudiospizzi)
-* Changes to xDnsServerPrimaryZone
-  * Fix bug in Get-TargetResource that caused the Zone Name to be null
-    ([issue 63](https://github.com/PowerShell/xDnsServer/issues/63)).
-    [Brandon Padgett (@gerane)](https://github.com/gerane)
-* Changes to xDnsRecord
-  * Added Ptr record support (partly resolves issue 34).
-    [Reggie Gibson (@regedit32)](https://github.com/regedit32)
-
+        ReleaseNotes = '
+        * Changes to xDnsServerAdZone
+          * fixing CimSession error on remote call ([issue 79](https://github.com/PowerShell/xDnsServer/issues/79).
+        * Changes to xDnsServer
+          * Updated appveyor.yml to use the default template and add CodeCov support
+          * Adding a Branches section to the README.md with Codecov badges for both
+            master and dev branch
+          * Updated description of resource module in README.md.
+          * Added resource xDnsServerZoneAging. [Claudio Spizzi (@claudiospizzi)](https://github.com/claudiospizzi)
+        * Changes to xDnsServerPrimaryZone
+          * Fix bug in Get-TargetResource that caused the Zone Name to be null
+            ([issue 63](https://github.com/PowerShell/xDnsServer/issues/63)).
+            [Brandon Padgett (@gerane)](https://github.com/gerane)
+        * Changes to xDnsRecord
+          * Added Ptr record support (partly resolves issue 34).
+            [Reggie Gibson (@regedit32)](https://github.com/regedit32)
 '
 
     } # End of PSData hashtable
