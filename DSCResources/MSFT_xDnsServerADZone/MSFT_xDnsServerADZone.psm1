@@ -80,7 +80,7 @@ function Get-TargetResource
                 Credential = $Credential
             }
         }
-        $getParams = @{
+        $getParams += @{
             CimSession = (New-CimSession @cimSessionParams)
         }
     }
