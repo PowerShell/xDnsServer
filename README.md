@@ -164,8 +164,13 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 
 ### Unreleased
 
+<<<<<<< HEAD
 * Changes to xDnsServerAdZone
   * fixing CimSession error on remote call ([issue 79](https://github.com/PowerShell/xDnsServer/issues/79).
+=======
+* Update appveyor.yml to use the default template.
+* Added default template files .codecov.yml, .gitattributes, and .gitignore, and .vscode folder.
+>>>>>>> 4fc159bbd688b3468e9b8ccef44c246009cd9e32
 
 ### 1.11.0.0
 
