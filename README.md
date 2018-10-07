@@ -164,6 +164,9 @@ Please check out common DSC Resources [contributing guidelines](https://github.c
 
 ### Unreleased
 
+* Changes to xDnsServerAdZone
+  * fixing CimSession error on remote call ([issue 79](https://github.com/PowerShell/xDnsServer/issues/79).
+
 ### 1.11.0.0
 
 * Changes to xDnsServer
