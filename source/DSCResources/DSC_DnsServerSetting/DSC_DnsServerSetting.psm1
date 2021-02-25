@@ -31,7 +31,16 @@ function Get-TargetResource
 
     Write-Verbose ($script:localizedData.GettingDnsServerSettings)
 
-    $dnsServerInstance = Get-CimClassMicrosoftDnsServer -DnsServer $DnsServer
+    $getDnsServerSettingParameters = @{
+        All = $true
+    }
+
+    if ($DnsServer -ne 'localhost')
+    {
+        $getDnsServerSettingParameters['ComputerName'] = $DnsServer
+    }
+
+    $dnsServerInstance = Get-DnsServerSetting @getDnsServerSettingParameters
 
     $returnValue = @{}
 

@@ -93,6 +93,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Moved to the same coding pattern as _DnsServerRecursion_.
 - DnsServerScavenging
   - Moved to the same coding pattern as _DnsServerRecursion_.
+- xDnsServerSetting
+  - Changed to use `Get-DnsServerSetting` and `Set-DnsServerSetting`
+    ([issue #185](https://github.com/dsccommunity/xDnsServer/issues/185)).
 
 ### Fixed
 
