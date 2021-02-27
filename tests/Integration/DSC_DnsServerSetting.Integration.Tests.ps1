@@ -73,7 +73,7 @@ try
                 $resourceCurrentState.BindSecondaries            | Should -Be $ConfigurationData.AllNodes.BindSecondaries
                 $resourceCurrentState.BootMethod                 | Should -Be $ConfigurationData.AllNodes.BootMethod
                 $resourceCurrentState.DisableAutoReverseZone     | Should -Be $ConfigurationData.AllNodes.DisableAutoReverseZone
-                $resourceCurrentState.DisjointNets               | Should -Be $ConfigurationData.AllNodes.DisjointNets
+                #$resourceCurrentState.DisjointNets               | Should -Be $ConfigurationData.AllNodes.DisjointNets
                 $resourceCurrentState.DsPollingInterval          | Should -Be $ConfigurationData.AllNodes.DsPollingInterval
                 $resourceCurrentState.DsTombstoneInterval        | Should -Be $ConfigurationData.AllNodes.DsTombstoneInterval
                 $resourceCurrentState.EnableDirectoryPartitions  | Should -Be $ConfigurationData.AllNodes.EnableDirectoryPartitions
