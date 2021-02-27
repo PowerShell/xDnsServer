@@ -6,7 +6,7 @@ Import-Module -Name $script:dnsServerDscCommonPath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 
-$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZones', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListenAddresses', 'DsTombstoneInterval', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
+$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZone', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListenAddresses', 'DsTombstoneInterval', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
 
 <#
     .SYNOPSIS
@@ -84,7 +84,7 @@ function Get-TargetResource
     .PARAMETER BootMethod
         Initialization method for the DNS Server.
 
-    .PARAMETER DisableAutoReverseZones
+    .PARAMETER DisableAutoReverseZone
         Indicates whether the DNS Server automatically creates standard reverse look
         up zones.
 
@@ -190,7 +190,7 @@ function Set-TargetResource
 
         [Parameter()]
         [bool]
-        $DisableAutoReverseZones,
+        $DisableAutoReverseZone,
 
         [Parameter()]
         [bool]
@@ -333,7 +333,7 @@ function Set-TargetResource
     .PARAMETER BootMethod
         Initialization method for the DNS Server.
 
-    .PARAMETER DisableAutoReverseZones
+    .PARAMETER DisableAutoReverseZone
         Indicates whether the DNS Server automatically creates standard reverse look
         up zones.
 
@@ -440,7 +440,7 @@ function Test-TargetResource
 
         [Parameter()]
         [bool]
-        $DisableAutoReverseZones,
+        $DisableAutoReverseZone,
 
         [Parameter()]
         [bool]

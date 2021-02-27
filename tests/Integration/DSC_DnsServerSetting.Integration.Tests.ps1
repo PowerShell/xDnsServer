@@ -72,7 +72,7 @@ try
                 $resourceCurrentState.AutoConfigFileZones        | Should -Be $ConfigurationData.AllNodes.AutoConfigFileZones
                 $resourceCurrentState.BindSecondaries            | Should -Be $ConfigurationData.AllNodes.BindSecondaries
                 $resourceCurrentState.BootMethod                 | Should -Be $ConfigurationData.AllNodes.BootMethod
-                $resourceCurrentState.DisableAutoReverseZones    | Should -Be $ConfigurationData.AllNodes.DisableAutoReverseZones
+                $resourceCurrentState.DisableAutoReverseZone     | Should -Be $ConfigurationData.AllNodes.DisableAutoReverseZone
                 $resourceCurrentState.DisjointNets               | Should -Be $ConfigurationData.AllNodes.DisjointNets
                 $resourceCurrentState.DsPollingInterval          | Should -Be $ConfigurationData.AllNodes.DsPollingInterval
                 $resourceCurrentState.DsTombstoneInterval        | Should -Be $ConfigurationData.AllNodes.DsTombstoneInterval

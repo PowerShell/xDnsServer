@@ -40,7 +40,7 @@ try
             AutoConfigFileZones       = 4
             BindSecondaries           = $true
             BootMethod                = 1
-            DisableAutoReverseZones   = $true
+            DisableAutoReverseZone    = $true
             DisjointNets              = $true
             DsPollingInterval         = 10
             DsTombstoneInterval       = 10
@@ -79,7 +79,7 @@ try
             AutoConfigFileZones       = 1
             BindSecondaries           = $false
             BootMethod                = 3
-            DisableAutoReverseZones   = $false
+            DisableAutoReverseZone    = $false
             DisjointNets              = $false
             DsAvailable               = $true
             DsPollingInterval         = 180

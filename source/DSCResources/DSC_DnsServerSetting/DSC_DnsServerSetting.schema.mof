@@ -8,7 +8,7 @@ class DSC_DnsServerSetting : OMI_BaseResource
     [Write, Description("Indicates which standard primary zones that are authoritative for the name of the DNS Server must be updated when the name server changes.")] Uint32 AutoConfigFileZones;
     [Write, Description("Determines the AXFR message format when sending to non-Microsoft DNS Server secondaries.")] Boolean BindSecondaries;
     [Write, Description("Initialization method for the DNS Server.")] Uint32 BootMethod;
-    [Write, Description("Indicates whether the DNS Server automatically creates standard reverse look up zones.")] Boolean DisableAutoReverseZones;
+    [Write, Description("Indicates whether the DNS Server automatically creates standard reverse look up zones.")] Boolean DisableAutoReverseZone;
     [Write, Description("Indicates whether the default port binding for a socket used to send queries to remote DNS Servers can be overridden.")] Boolean DisjointNets;
     [Write, Description("Interval, in seconds, to poll the DS-integrated zones.")] Uint32 DsPollingInterval;
     [Write, Description("Lifetime of tombstoned records in Directory Service integrated zones, expressed in seconds.")] Uint32 DsTombstoneInterval;

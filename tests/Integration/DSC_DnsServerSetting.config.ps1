@@ -20,7 +20,7 @@ $ConfigurationData = @{
             AutoConfigFileZones       = 1
             BindSecondaries           = $false
             BootMethod                = 3
-            DisableAutoReverseZones   = $false
+            DisableAutoReverseZone    = $false
             DisjointNets              = $false
             DsPollingInterval         = 180
             DsTombstoneInterval       = 1209600
@@ -65,7 +65,7 @@ Configuration DSC_DnsServerSetting_SetSettings_config
             AutoConfigFileZones       = $Node.AutoConfigFileZones
             BindSecondaries           = $Node.BindSecondaries
             BootMethod                = $Node.BootMethod
-            DisableAutoReverseZones   = $Node.DisableAutoReverseZones
+            DisableAutoReverseZone    = $Node.DisableAutoReverseZone
             DisjointNets              = $Node.DisjointNets
             DsPollingInterval         = $Node.DsPollingInterval
             DsTombstoneInterval       = $Node.DsTombstoneInterval
