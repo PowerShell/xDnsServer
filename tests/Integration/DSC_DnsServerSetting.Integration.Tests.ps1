@@ -78,7 +78,7 @@ try
                 #$resourceCurrentState.DsTombstoneInterval        | Should -Be $ConfigurationData.AllNodes.DsTombstoneInterval
                 $resourceCurrentState.EnableDnsSec               | Should -Be $ConfigurationData.AllNodes.EnableDnsSec
                 $resourceCurrentState.ForwardDelegations         | Should -Be $ConfigurationData.AllNodes.ForwardDelegations
-                $resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
+                #$resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
                 $resourceCurrentState.ListenAddresses            | Should -Be $ConfigurationData.AllNodes.ListenAddresses
                 $resourceCurrentState.LocalNetPriority           | Should -Be $ConfigurationData.AllNodes.LocalNetPriority
                 $resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
