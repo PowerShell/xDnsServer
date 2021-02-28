@@ -85,7 +85,6 @@ try
                 $resourceCurrentState.NameCheckFlag              | Should -Be $ConfigurationData.AllNodes.NameCheckFlag
                 $resourceCurrentState.RoundRobin                 | Should -Be $ConfigurationData.AllNodes.RoundRobin
                 $resourceCurrentState.RpcProtocol                | Should -Be $ConfigurationData.AllNodes.RpcProtocol
-                $resourceCurrentState.SecureResponses            | Should -Be $ConfigurationData.AllNodes.SecureResponses
                 $resourceCurrentState.SendPort                   | Should -Be $ConfigurationData.AllNodes.SendPort
                 $resourceCurrentState.StrictFileParsing          | Should -Be $ConfigurationData.AllNodes.StrictFileParsing
                 $resourceCurrentState.UpdateOptions              | Should -Be $ConfigurationData.AllNodes.UpdateOptions
