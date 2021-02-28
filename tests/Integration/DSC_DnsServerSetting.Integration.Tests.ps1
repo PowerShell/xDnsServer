@@ -79,7 +79,6 @@ try
                 $resourceCurrentState.EnableDnsSec               | Should -Be $ConfigurationData.AllNodes.EnableDnsSec
                 $resourceCurrentState.ForwardDelegations         | Should -Be $ConfigurationData.AllNodes.ForwardDelegations
                 #$resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
-                $resourceCurrentState.ListeningIPAddress         | Should -Be $ConfigurationData.AllNodes.ListeningIPAddress
                 $resourceCurrentState.LocalNetPriority           | Should -Be $ConfigurationData.AllNodes.LocalNetPriority
                 $resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
                 $resourceCurrentState.LooseWildcarding           | Should -Be $ConfigurationData.AllNodes.LooseWildcarding
@@ -95,6 +94,7 @@ try
                 $resourceCurrentState.WriteAuthorityNS           | Should -Be $ConfigurationData.AllNodes.WriteAuthorityNS
                 $resourceCurrentState.XfrConnectTimeout          | Should -Be $ConfigurationData.AllNodes.XfrConnectTimeout
                 $resourceCurrentState.EnableDirectoryPartitions  | Should -Be $ConfigurationData.AllNodes.EnableDirectoryPartitions
+                $resourceCurrentState.ListeningIPAddress         | Should -Be $ConfigurationData.AllNodes.ListeningIPAddress
             }
 
             It 'Should return ''True'' when Test-DscConfiguration is run' {
