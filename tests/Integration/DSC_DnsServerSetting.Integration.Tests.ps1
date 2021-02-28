@@ -78,7 +78,6 @@ try
                 #$resourceCurrentState.DsTombstoneInterval        | Should -Be $ConfigurationData.AllNodes.DsTombstoneInterval
                 $resourceCurrentState.EnableDnsSec               | Should -Be $ConfigurationData.AllNodes.EnableDnsSec
                 $resourceCurrentState.ForwardDelegations         | Should -Be $ConfigurationData.AllNodes.ForwardDelegations
-                #$resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
                 $resourceCurrentState.LocalNetPriority           | Should -Be $ConfigurationData.AllNodes.LocalNetPriority
                 $resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
                 $resourceCurrentState.LooseWildcarding           | Should -Be $ConfigurationData.AllNodes.LooseWildcarding
@@ -90,8 +89,18 @@ try
                 $resourceCurrentState.UpdateOptions              | Should -Be $ConfigurationData.AllNodes.UpdateOptions
                 $resourceCurrentState.WriteAuthorityNS           | Should -Be $ConfigurationData.AllNodes.WriteAuthorityNS
                 $resourceCurrentState.XfrConnectTimeout          | Should -Be $ConfigurationData.AllNodes.XfrConnectTimeout
+
+                # these two did not set to the same value
                 $resourceCurrentState.EnableDirectoryPartitions  | Should -Be $ConfigurationData.AllNodes.EnableDirectoryPartitions
                 $resourceCurrentState.ListeningIPAddress         | Should -Be $ConfigurationData.AllNodes.ListeningIPAddress
+
+                # These does not exist in Get-DnsServerSetting https://docs.microsoft.com/en-us/powershell/module/dnsserver/get-dnsserversetting?view=win10-ps,
+                # might need to keep from the CIM class https://docs.microsoft.com/en-us/windows/win32/dns/microsoftdns-server
+                #$resourceCurrentState.DisjointNets               | Should -Be $ConfigurationData.AllNodes.DisjointNets
+                #$resourceCurrentState.DsPollingInterval          | Should -Be $ConfigurationData.AllNodes.DsPollingInterval
+                #$resourceCurrentState.DsTombstoneInterval        | Should -Be $ConfigurationData.AllNodes.DsTombstoneInterval
+                #$resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
+                #$resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
             }
 
             It 'Should return ''True'' when Test-DscConfiguration is run' {
