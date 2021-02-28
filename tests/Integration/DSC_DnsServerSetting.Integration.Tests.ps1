@@ -82,8 +82,6 @@ try
                 $resourceCurrentState.LocalNetPriority           | Should -Be $ConfigurationData.AllNodes.LocalNetPriority
                 $resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
                 $resourceCurrentState.LooseWildcarding           | Should -Be $ConfigurationData.AllNodes.LooseWildcarding
-                $resourceCurrentState.MaxCacheTTL                | Should -Be $ConfigurationData.AllNodes.MaxCacheTTL
-                $resourceCurrentState.MaxNegativeCacheTTL        | Should -Be $ConfigurationData.AllNodes.MaxNegativeCacheTTL
                 $resourceCurrentState.NameCheckFlag              | Should -Be $ConfigurationData.AllNodes.NameCheckFlag
                 $resourceCurrentState.RoundRobin                 | Should -Be $ConfigurationData.AllNodes.RoundRobin
                 $resourceCurrentState.RpcProtocol                | Should -Be $ConfigurationData.AllNodes.RpcProtocol
