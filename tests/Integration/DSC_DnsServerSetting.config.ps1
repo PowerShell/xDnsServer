@@ -32,7 +32,7 @@ $ConfigurationData = @{
                 At least one of the listening IP addresses that is specified must
                 be present on a network interface on the host running the test.
             #>
-            ListenAddresses           = @($firstIpAddress, '10.0.0.10')
+            ListeningIPAddress        = @($firstIpAddress, '10.0.0.10')
             LocalNetPriority          = $true
             LogLevel                  = 0
             LooseWildcarding          = $false
@@ -73,7 +73,7 @@ Configuration DSC_DnsServerSetting_SetSettings_config
             EnableDnsSec              = $Node.EnableDnsSec
             ForwardDelegations        = $Node.ForwardDelegations
             IsSlave                   = $Node.IsSlave
-            ListenAddresses           = $Node.ListenAddresses
+            ListeningIPAddress        = $Node.ListeningIPAddress
             LocalNetPriority          = $Node.LocalNetPriority
             LogLevel                  = $Node.LogLevel
             LooseWildcarding          = $Node.LooseWildcarding

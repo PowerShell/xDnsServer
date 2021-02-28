@@ -98,6 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     ([issue #185](https://github.com/dsccommunity/xDnsServer/issues/185)).
   - BREAKING CHANGES: The property `DisableAutoReverseZones` have been renamed
     to `DisableAutoReverseZone`.
+  - BREAKING CHANGES: The property `ListenAddresses` have been renamed
+    to `ListeningIPAddress`.
 
 ### Fixed
 

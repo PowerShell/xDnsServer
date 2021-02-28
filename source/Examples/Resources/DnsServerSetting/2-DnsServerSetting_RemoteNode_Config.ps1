@@ -48,8 +48,8 @@ Configuration DnsServerSetting_RemoteNode_Config
     {
         DnsServerSetting 'DnsServerProperties'
         {
-            DnsServer           = 'dns1.company.local'
-            ListenAddresses    = '10.0.0.4'
+            DnsServer          = 'dns1.company.local'
+            ListeningIPAddress = '10.0.0.4'
             IsSlave            = $true
             RoundRobin         = $true
             LocalNetPriority   = $true

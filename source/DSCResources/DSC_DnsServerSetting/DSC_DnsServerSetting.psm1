@@ -114,7 +114,7 @@ function Get-TargetResource
         TRUE if the DNS server does not use recursion when name-resolution through
         forwarders fails.
 
-    .PARAMETER ListenAddresses
+    .PARAMETER ListeningIPAddress
         Enumerates the list of IP addresses on which the DNS Server can receive
         queries.
 
@@ -222,7 +222,7 @@ function Set-TargetResource
 
         [Parameter()]
         [string[]]
-        $ListenAddresses,
+        $ListeningIPAddress,
 
         [Parameter()]
         [bool]
@@ -363,7 +363,7 @@ function Set-TargetResource
         TRUE if the DNS server does not use recursion when name-resolution through
         forwarders fails.
 
-    .PARAMETER ListenAddresses
+    .PARAMETER ListeningIPAddress
         Enumerates the list of IP addresses on which the DNS Server can receive
         queries.
 
@@ -472,7 +472,7 @@ function Test-TargetResource
 
         [Parameter()]
         [string[]]
-        $ListenAddresses,
+        $ListeningIPAddress,
 
         [Parameter()]
         [bool]

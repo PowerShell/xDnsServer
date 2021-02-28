@@ -16,7 +16,7 @@ class DSC_DnsServerSetting : OMI_BaseResource
     [Write, Description("Specifies whether the DNS Server includes DNSSEC-specific RRs, KEY, SIG, and NXT in a response.")] Uint32 EnableDnsSec;
     [Write, Description("Specifies whether queries to delegated sub-zones are forwarded.")] Uint32 ForwardDelegations;
     [Write, Description("TRUE if the DNS server does not use recursion when name-resolution through forwarders fails.")] Boolean IsSlave;
-    [Write, Description("Enumerates the list of IP addresses on which the DNS Server can receive queries.")] String ListenAddresses[];
+    [Write, Description("Enumerates the list of IP addresses on which the DNS Server can receive queries.")] String ListeningIPAddress[];
     [Write, Description("Indicates whether the DNS Server gives priority to the local net address when returning A records.")] Boolean LocalNetPriority;
     [Write, Description("Indicates which policies are activated in the Event Viewer system log.")] Uint32 LogLevel;
     [Write, Description("Indicates whether the DNS Server performs loose wildcarding.")] Boolean LooseWildcarding;

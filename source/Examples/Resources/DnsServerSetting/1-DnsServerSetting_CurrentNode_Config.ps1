@@ -49,7 +49,7 @@ Configuration DnsServerSetting_CurrentNode_Config
         DnsServerSetting 'DnsServerProperties'
         {
             DnsServer           = 'localhost'
-            ListenAddresses    = '10.0.0.4'
+            ListeningIPAddress    = '10.0.0.4'
             IsSlave            = $true
             RoundRobin         = $true
             LocalNetPriority   = $true

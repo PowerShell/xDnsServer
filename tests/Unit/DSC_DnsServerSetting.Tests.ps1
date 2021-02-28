@@ -48,7 +48,7 @@ try
             EnableDnsSec              = 0
             ForwardDelegations        = 1
             IsSlave                   = $true
-            ListenAddresses           = '192.168.0.10', '192.168.0.11'
+            ListeningIPAddress        = '192.168.0.10', '192.168.0.11'
             LocalNetPriority          = $false
             LogLevel                  = 256
             LooseWildcarding          = $true
@@ -88,7 +88,7 @@ try
             EnableDnsSec              = 1
             ForwardDelegations        = 0
             IsSlave                   = $false
-            ListenAddresses           = $null
+            ListeningIPAddress        = $null
             LocalNetPriority          = $true
             LogLevel                  = 0
             LooseWildcarding          = $false
