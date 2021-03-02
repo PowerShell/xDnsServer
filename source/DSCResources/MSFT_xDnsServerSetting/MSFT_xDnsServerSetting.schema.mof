@@ -25,7 +25,6 @@ class MSFT_xDnsServerSetting : OMI_BaseResource
     [Write, Description("TRUE if the DNS server does not use recursion when name-resolution through forwarders fails.")] Boolean IsSlave;
     [Write, Description("Enumerates the list of IP addresses on which the DNS Server can receive queries.")] String ListenAddresses[];
     [Write, Description("Indicates whether the DNS Server gives priority to the local net address when returning A records.")] Boolean LocalNetPriority;
-    [Write, Description("List of IP addresses used to filter DNS events written to the debug log.")] String LogIPFilterList[];
     [Write, Description("Indicates which policies are activated in the Event Viewer system log.")] Uint32 LogLevel;
     [Write, Description("Indicates whether the DNS Server performs loose wildcarding.")] Boolean LooseWildcarding;
     [Write, Description("Maximum time, in seconds, the record of a recursive name query may remain in the DNS Server cache.")] Uint32 MaxCacheTTL;
