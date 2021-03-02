@@ -6,7 +6,7 @@ Import-Module -Name $script:dnsServerDscCommonPath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 
-$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'MaxCacheTTL', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZones', 'StrictFileParsing', 'ForwardingTimeout', 'NoRecursion', 'ScavengingInterval', 'DisjointNets', 'Forwarders', 'DefaultAgingState', 'EnableDirectoryPartitions', 'LogFilePath', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'EnableEDnsProbes', 'NameCheckFlag', 'EDnsCacheTimeout', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'LogIPFilterList', 'RecursionTimeout', 'ListenAddresses', 'DsTombstoneInterval', 'EventLogLevel', 'RecursionRetry', 'RpcProtocol', 'SecureResponses', 'RoundRobin', 'ForwardDelegations', 'LogFileMaxSize', 'DefaultNoRefreshInterval', 'MaxNegativeCacheTTL', 'DefaultRefreshInterval'
+$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'MaxCacheTTL', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZones', 'StrictFileParsing', 'ForwardingTimeout', 'NoRecursion', 'ScavengingInterval', 'DisjointNets', 'Forwarders', 'DefaultAgingState', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'EnableEDnsProbes', 'NameCheckFlag', 'EDnsCacheTimeout', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'RecursionTimeout', 'ListenAddresses', 'DsTombstoneInterval', 'RecursionRetry', 'RpcProtocol', 'SecureResponses', 'RoundRobin', 'ForwardDelegations', 'LogFileMaxSize', 'DefaultNoRefreshInterval', 'MaxNegativeCacheTTL', 'DefaultRefreshInterval'
 
 <#
     .SYNOPSIS
@@ -40,7 +40,6 @@ function Get-TargetResource
         $returnValue.Add($property, $dnsServerInstance."$property")
     }
 
-    $returnValue.LogIPFilterList = (Get-PsDnsServerDiagnosticsClass -DnsServer $DnsServer).FilterIPAddressList
     $returnValue.DnsServer = $DnsServer
 
     return $returnValue
@@ -122,9 +121,6 @@ function Get-TargetResource
         the DNS Server responds to queries with OPTs only if OPTs are sent in the
         original query.
 
-    .PARAMETER EventLogLevel
-        Indicates which events the DNS Server records in the Event Viewer system log.
-
     .PARAMETER ForwardDelegations
         Specifies whether queries to delegated sub-zones are forwarded.
 
@@ -147,15 +143,6 @@ function Get-TargetResource
     .PARAMETER LocalNetPriority
         Indicates whether the DNS Server gives priority to the local net address
         when returning A records.
-
-    .PARAMETER LogFileMaxSize
-        Size of the DNS Server debug log, in bytes.
-
-    .PARAMETER LogFilePath
-        File name and path for the DNS Server debug log.
-
-    .PARAMETER LogIPFilterList
-        List of IP addresses used to filter DNS events written to the debug log.
 
     .PARAMETER LogLevel
         Indicates which policies are activated in the Event Viewer system log.
@@ -295,10 +282,6 @@ function Set-TargetResource
 
         [Parameter()]
         [uint32]
-        $EventLogLevel,
-
-        [Parameter()]
-        [uint32]
         $ForwardDelegations,
 
         [Parameter()]
@@ -320,18 +303,6 @@ function Set-TargetResource
         [Parameter()]
         [bool]
         $LocalNetPriority,
-
-        [Parameter()]
-        [uint32]
-        $LogFileMaxSize,
-
-        [Parameter()]
-        [string]
-        $LogFilePath,
-
-        [Parameter()]
-        [string[]]
-        $LogIPFilterList,
 
         [Parameter()]
         [uint32]
@@ -512,9 +483,6 @@ function Set-TargetResource
         the DNS Server responds to queries with OPTs only if OPTs are sent in the
         original query.
 
-    .PARAMETER EventLogLevel
-        Indicates which events the DNS Server records in the Event Viewer system log.
-
     .PARAMETER ForwardDelegations
         Specifies whether queries to delegated sub-zones are forwarded.
 
@@ -537,15 +505,6 @@ function Set-TargetResource
     .PARAMETER LocalNetPriority
         Indicates whether the DNS Server gives priority to the local net address
         when returning A records.
-
-    .PARAMETER LogFileMaxSize
-        Size of the DNS Server debug log, in bytes.
-
-    .PARAMETER LogFilePath
-        File name and path for the DNS Server debug log.
-
-    .PARAMETER LogIPFilterList
-        List of IP addresses used to filter DNS events written to the debug log.
 
     .PARAMETER LogLevel
         Indicates which policies are activated in the Event Viewer system log.
@@ -686,10 +645,6 @@ function Test-TargetResource
 
         [Parameter()]
         [uint32]
-        $EventLogLevel,
-
-        [Parameter()]
-        [uint32]
         $ForwardDelegations,
 
         [Parameter()]
@@ -711,18 +666,6 @@ function Test-TargetResource
         [Parameter()]
         [bool]
         $LocalNetPriority,
-
-        [Parameter()]
-        [uint32]
-        $LogFileMaxSize,
-
-        [Parameter()]
-        [string]
-        $LogFilePath,
-
-        [Parameter()]
-        [string[]]
-        $LogIPFilterList,
 
         [Parameter()]
         [uint32]
@@ -802,43 +745,6 @@ function Test-TargetResource
     $result = Test-DscDnsParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -TurnOffTypeChecking -Verbose:$VerbosePreference
 
     return $result
-}
-
-<#
-    .SYNOPSIS
-        Internal function to get results from the PS_DnsServerDiagnostics.
-        This is needed because LogIpFilterList is not returned by querying the MicrosoftDNS_Server class.
-
-    .PARAMETER DnsServer
-        Specifies the DNS server to connect to, or use 'localhost' for the current
-        node.
-#>
-function Get-PsDnsServerDiagnosticsClass
-{
-    [CmdletBinding()]
-    [OutputType([Microsoft.Management.Infrastructure.CimInstance])]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DnsServer
-    )
-
-    $invokeCimMethodParameters = @{
-        NameSpace   = 'root/Microsoft/Windows/DNS'
-        ClassName   = 'PS_DnsServerDiagnostics'
-        MethodName  = 'Get'
-        ErrorAction = 'Stop'
-    }
-
-    if ($DnsServer -ne 'localhost')
-    {
-        $invokeCimMethodParameters['ComputerName'] = $DnsServer
-    }
-
-    $cimDnsServerDiagnostics = Invoke-CimMethod @invokeCimMethodParameters
-
-    return $cimDnsServerDiagnostics.cmdletOutput
 }
 
 function Get-CimClassMicrosoftDnsServer

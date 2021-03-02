@@ -51,16 +51,12 @@ try
             EnableDirectoryPartitions = $false
             EnableDnsSec              = 0
             EnableEDnsProbes          = $false
-            EventLogLevel             = 3
             ForwardDelegations        = 1
             Forwarders                = '8.8.8.8'
             ForwardingTimeout         = 4
             IsSlave                   = $true
             ListenAddresses           = '192.168.0.10', '192.168.0.11'
             LocalNetPriority          = $false
-            LogFileMaxSize            = 400000000
-            LogFilePath               = 'C:\Windows\System32\DNS_log\DNS.log'
-            LogIPFilterList           = '192.168.0.10', '192.168.0.11'
             LogLevel                  = 256
             LooseWildcarding          = $true
             MaxCacheTTL               = 86200
@@ -109,16 +105,12 @@ try
             EnableDirectoryPartitions = $true
             EnableDnsSec              = 1
             EnableEDnsProbes          = $true
-            EventLogLevel             = 4
             ForwardDelegations        = 0
             Forwarders                = { 168.63.129.16 }
             ForwardingTimeout         = 3
             IsSlave                   = $false
             ListenAddresses           = $null
             LocalNetPriority          = $true
-            LogFileMaxSize            = 500000000
-            LogFilePath               = 'C:\Windows\System32\DNS\DNS.log'
-            LogIPFilterList           = '10.1.1.1', '10.0.0.1'
             LogLevel                  = 0
             LooseWildcarding          = $false
             MaxCacheTTL               = 86400
@@ -145,10 +137,6 @@ try
         $array2 = 3, 2, 1
         $array3 = 1, 2, 3, 4
 
-        $mockGetDnsDiag = @{
-            FilterIPAddressList = '10.1.1.1', '10.0.0.1'
-        }
-
         $mockReadOnlyProperties = @{
             DsAvailable = $true
         }
@@ -161,7 +149,6 @@ try
             Context 'The system is not in the desired state' {
                 It "Get method returns 'something'" {
                     Mock Get-CimInstance -MockWith { $mockGetCimInstance }
-                    Mock Get-PsDnsServerDiagnosticsClass -MockWith { $mockGetDnsDiag }
                     $getResult = Get-TargetResource -DnsServer 'dns1.company.local' -Verbose
 
                     foreach ($key in $getResult.Keys)
@@ -170,10 +157,7 @@ try
                         {
                             $getResult[$key] | Should be $mockGetCimInstance[$key]
                         }
-                        elseif ($key -eq 'LogIPFilterList')
-                        {
-                            $getResult[$key] | Should be $mockGetDnsDiag[$key]
-                        }
+
                         if ($key -eq 'DsAvailable')
                         {
                             $getResult[$key] | Should Be $mockReadOnlyProperties[$key]
@@ -189,7 +173,6 @@ try
                     }
 
                     Mock Get-CimInstance -MockWith { throw $mockThrow }
-                    Mock Get-PsDnsServerDiagnosticsClass
 
                     { Get-TargetResource -DnsServer 'dns1.company.local' -Verbose } | Should -Throw
                 }

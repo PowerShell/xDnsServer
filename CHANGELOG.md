@@ -92,6 +92,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     module _DscResource.Common_ ([issue #167](https://github.com/dsccommunity/xDnsServer/issues/167)).
   - Remove helper function `ConvertTo-HashTable` in favor of the one in
     module _DscResource.Common_ ([issue #168](https://github.com/dsccommunity/xDnsServer/issues/168)).
+- xDnServerSetting
+  - BREAKING CHANGE: The properties `LogIPFilterList`, `LogFilePath`, `LogFileMaxSize`,
+    and `EventLogLevel` have been removed. Use the resource _xDnsServerDiagnostics_
+    with the properties `FilterIPAddressList`, `LogFilePath`, `MaxMBFileSize`,
+    and `EventLogLevel` respectively to enforce these settings ([issue #190](https://github.com/dsccommunity/xDnsServer/issues/190)).
+    This is done in preparation to support more settings through the cmdlet
+    `Get-DnsServerSetting` for the resource _xDnServerSetting_, and these
+    values are not available through that cmdlet.
 
 ### Fixed
 

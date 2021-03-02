@@ -83,16 +83,12 @@ try
                 $resourceCurrentState.EnableDirectoryPartitions  | Should -Be $ConfigurationData.AllNodes.EnableDirectoryPartitions
                 $resourceCurrentState.EnableDnsSec               | Should -Be $ConfigurationData.AllNodes.EnableDnsSec
                 $resourceCurrentState.EnableEDnsProbes           | Should -Be $ConfigurationData.AllNodes.EnableEDnsProbes
-                $resourceCurrentState.EventLogLevel              | Should -Be $ConfigurationData.AllNodes.EventLogLevel
                 $resourceCurrentState.ForwardDelegations         | Should -Be $ConfigurationData.AllNodes.ForwardDelegations
                 $resourceCurrentState.Forwarders                 | Should -Be $ConfigurationData.AllNodes.Forwarders
                 $resourceCurrentState.ForwardingTimeout          | Should -Be $ConfigurationData.AllNodes.ForwardingTimeout
                 $resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
                 $resourceCurrentState.ListenAddresses            | Should -Be $ConfigurationData.AllNodes.ListenAddresses
                 $resourceCurrentState.LocalNetPriority           | Should -Be $ConfigurationData.AllNodes.LocalNetPriority
-                $resourceCurrentState.LogFileMaxSize             | Should -Be $ConfigurationData.AllNodes.LogFileMaxSize
-                $resourceCurrentState.LogFilePath                | Should -Be $ConfigurationData.AllNodes.LogFilePath
-                $resourceCurrentState.LogIPFilterList            | Should -Be $ConfigurationData.AllNodes.LogIPFilterList
                 $resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
                 $resourceCurrentState.LooseWildcarding           | Should -Be $ConfigurationData.AllNodes.LooseWildcarding
                 $resourceCurrentState.MaxCacheTTL                | Should -Be $ConfigurationData.AllNodes.MaxCacheTTL

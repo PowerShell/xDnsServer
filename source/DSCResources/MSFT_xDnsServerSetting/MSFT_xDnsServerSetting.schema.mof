@@ -19,15 +19,12 @@ class MSFT_xDnsServerSetting : OMI_BaseResource
     [Write, Description("Specifies whether support for application directory partitions is enabled on the DNS Server.")] Boolean EnableDirectoryPartitions;
     [Write, Description("Specifies whether the DNS Server includes DNSSEC-specific RRs, KEY, SIG, and NXT in a response.")] Uint32 EnableDnsSec;
     [Write, Description("Specifies the behavior of the DNS Server. When TRUE, the DNS Server always responds with OPT resource records according to RFC 2671, unless the remote server has indicated it does not support EDNS in a prior exchange. If FALSE, the DNS Server responds to queries with OPTs only if OPTs are sent in the original query.")] Boolean EnableEDnsProbes;
-    [Write, Description("Indicates which events the DNS Server records in the Event Viewer system log.")] Uint32 EventLogLevel;
     [Write, Description("Specifies whether queries to delegated sub-zones are forwarded.")] Uint32 ForwardDelegations;
     [Write, Description("Enumerates the list of IP addresses of Forwarders to which the DNS Server forwards queries.")] String Forwarders[];
     [Write, Description("Time, in seconds, a DNS Server forwarding a query will wait for resolution from the forwarder before attempting to resolve the query itself.")] Uint32 ForwardingTimeout;
     [Write, Description("TRUE if the DNS server does not use recursion when name-resolution through forwarders fails.")] Boolean IsSlave;
     [Write, Description("Enumerates the list of IP addresses on which the DNS Server can receive queries.")] String ListenAddresses[];
     [Write, Description("Indicates whether the DNS Server gives priority to the local net address when returning A records.")] Boolean LocalNetPriority;
-    [Write, Description("Size of the DNS Server debug log, in bytes.")] Uint32 LogFileMaxSize;
-    [Write, Description("File name and path for the DNS Server debug log.")] String LogFilePath;
     [Write, Description("List of IP addresses used to filter DNS events written to the debug log.")] String LogIPFilterList[];
     [Write, Description("Indicates which policies are activated in the Event Viewer system log.")] Uint32 LogLevel;
     [Write, Description("Indicates whether the DNS Server performs loose wildcarding.")] Boolean LooseWildcarding;
