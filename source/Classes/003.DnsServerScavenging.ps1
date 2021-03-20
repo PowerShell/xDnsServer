@@ -102,7 +102,7 @@ class DnsServerScavenging : ResourceBase
     {
         Write-Verbose -Message ($this.localizedData.SetDesiredState -f $this.DnsServer)
 
-        # Get enforced properties that are not in desired state.
+        # Call the base method to get enforced properties that are not in desired state.
         $propertiesNotInDesiredState = $this.Compare()
 
         $setDnsServerScavengingParameters = $this.GetDesiredStateForSplatting($propertiesNotInDesiredState)
