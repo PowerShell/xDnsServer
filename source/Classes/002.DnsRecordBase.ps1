@@ -15,7 +15,7 @@
         Whether the host record should be present or removed.
 #>
 
-class DnsRecordBase : ResourceBase
+class DnsRecordBase : ResourcePropertiesBase
 {
     [DscProperty(Key)]
     [System.String]
@@ -41,7 +41,7 @@ class DnsRecordBase : ResourceBase
         # Create a list of the inherited class names
         $inheritedClasses = @(,$this.GetType().Name)
         $parentClass = $this.GetType().BaseType
-        while ($parentClass -ne [ResourceBase])
+        while ($parentClass -ne [ResourcePropertiesBase])
         {
             $inheritedClasses += $parentClass.Name
             $parentClass = $parentClass.BaseType
