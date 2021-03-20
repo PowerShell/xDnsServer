@@ -52,7 +52,6 @@
 [DscResource()]
 class DnsServerScavenging : ResourceBase
 {
-    # The property DnsServer is overridden from the base class.
     [DscProperty(Key)]
     [System.String]
     $DnsServer
