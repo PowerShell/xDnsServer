@@ -8,6 +8,7 @@ CopyPaths:
   - Modules
 Encoding: UTF8
 VersionedOutputDirectory: true
+Prefix: prefix.ps1
 
 ####################################################
 #   ModuleBuilder Dependent Modules Configuration  #
