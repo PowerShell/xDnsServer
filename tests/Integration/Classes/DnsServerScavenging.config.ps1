@@ -19,6 +19,7 @@ configuration DnsServerScavenging_EnableScavenging_Config
     {
         DnsServerScavenging 'Integration_Test'
         {
+            DnsServer = 'localhost'
             ScavengingState = $true
         }
     }
@@ -36,6 +37,7 @@ configuration DnsServerScavenging_SetAllIntervals_Config
     {
         DnsServerScavenging 'Integration_Test'
         {
+            DnsServer = 'localhost'
             ScavengingInterval = '30.00:00:00'
             RefreshInterval = '30.00:00:00'
             NoRefreshInterval = '30.00:00:00'
@@ -55,6 +57,7 @@ configuration DnsServerScavenging_SetOneInterval_Config
     {
         DnsServerScavenging 'Integration_Test'
         {
+            DnsServer = 'localhost'
             ScavengingInterval = '6.23:00:00'
         }
     }
@@ -72,6 +75,7 @@ configuration DnsServerScavenging_DisableScavenging_Config
     {
         DnsServerScavenging 'Integration_Test'
         {
+            DnsServer = 'localhost'
             ScavengingState = $false
         }
     }
