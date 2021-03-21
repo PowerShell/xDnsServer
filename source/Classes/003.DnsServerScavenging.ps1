@@ -76,6 +76,10 @@ class DnsServerScavenging : ResourceBase
     [Nullable[System.DateTime]]
     $LastScavengeTime
 
+    # hidden [Nullable[System.TimeSpan]] $_scavengingState = $null
+    # hidden [Nullable[System.TimeSpan]] $_refreshInterval = $null
+    # hidden [Nullable[System.TimeSpan]] $_noRefreshInterval = $null
+
     # Default constructor.
     DnsServerScavenging() : base ()
     {
@@ -100,6 +104,8 @@ class DnsServerScavenging : ResourceBase
 
     [void] Set()
     {
+        $this.AssertProperties()
+
         Write-Verbose -Message ($this.localizedData.SetDesiredState -f $this.DnsServer)
 
         # Call the base method to get enforced properties that are not in desired state.
@@ -121,6 +127,8 @@ class DnsServerScavenging : ResourceBase
 
     [System.Boolean] Test()
     {
+        $this.AssertProperties()
+
         Write-Verbose -Message ($this.localizedData.TestDesiredState -f $this.DnsServer)
 
         # Call the base method to test all of the properties that should be enforced.
@@ -136,5 +144,37 @@ class DnsServerScavenging : ResourceBase
         }
 
         return $isInDesiredState
+    }
+
+    hidden [void] AssertProperties()
+    {
+        @(
+            'ScavengingInterval'
+            'RefreshInterval'
+            'NoRefreshInterval'
+        ) | ForEach-Object -Process {
+            $valueToConvert = $this.$_
+
+            # Only evaluate properties that have a value.
+            if ($null -ne $valueToConvert)
+            {
+                $timeSpanObject = $valueToConvert | ConvertTo-TimeSpan
+
+                # If the conversion fails $null is returned.
+                if ($null -eq $timeSpanObject)
+                {
+                    $errorMessage = $this.localizedData.PropertyHasWrongFormat -f $_, $valueToConvert
+
+                    New-InvalidOperationException -Message $errorMessage
+                }
+
+                if ($timeSpanObject -gt [System.TimeSpan] '365.00:00:00')
+                {
+                    $errorMessage = $this.localizedData.TimeSpanExceedMaximumValue -f $_, $timeSpanObject.ToString()
+
+                    New-InvalidOperationException -Message $errorMessage
+                }
+            }
+        }
     }
 }
