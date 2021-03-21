@@ -27,8 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     that _Microsoft DNS Server_ is required on a node targeted by a resource,
     and that the DSC resources requires the [DnsServer](https://docs.microsoft.com/en-us/powershell/module/dnsserver)
     PowerShell module ([issue #37](https://github.com/dsccommunity/xDnsServer/issues/37)).
-  - Added the base class `ResourcePropertiesBase` to hold DSC properties that should be
-    inherited for all class-based resources.
+  - Added the base class `ResourcePropertiesBase` to hold DSC properties that
+    should be inherited for all class-based resources.
+  - Added new private function `ConvertTo-TimeSpan` to help when evaluating
+    properties that must be passed as strings and then converted to `[System.TimeSpan]`.
 - xDNSServerClientSubnet
   - Added integration tests.
 - xDnsServerPrimaryZone
