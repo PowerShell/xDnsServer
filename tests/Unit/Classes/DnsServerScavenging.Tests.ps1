@@ -56,7 +56,7 @@ Describe 'DnsServerScavenging\Get()' -Tag 'Get' {
             $getResult.NoRefreshInterval | Should -Be '30.00:00:00'
 
             # Returns as a DateTime type and not a string.
-            $getResult.LastScavengeTime.ToString() | Should -Be '2021-01-01 00:00:00'
+            $getResult.LastScavengeTime.ToString('yyyy-mm-dd HH:mm:ss') | Should -Be ([System.DateTime] '2021-01-01 00:00:00').ToString('yyyy-mm-dd HH:mm:ss')
 
             Assert-MockCalled -CommandName Get-DnsServerScavenging -ModuleName $ProjectName -Exactly -Times 1 -Scope It
         }
