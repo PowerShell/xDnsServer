@@ -28,6 +28,8 @@ class ResourceBase
     {
         $dscResourceObject = [System.Activator]::CreateInstance($this.GetType())
 
+        $dscResourceObject.DnsServer = $this.DnsServer
+
         foreach ($propertyName in $this.PSObject.Properties.Name)
         {
             $dscResourceObject.$propertyName = $CurrentState.$propertyName

@@ -107,18 +107,25 @@ class DnsServerScavenging : ResourceBase
         # Call the base method to get enforced properties that are not in desired state.
         $propertiesNotInDesiredState = $this.Compare()
 
-        $setDnsServerScavengingParameters = $this.GetDesiredStateForSplatting($propertiesNotInDesiredState)
-
-        $setDnsServerScavengingParameters.Keys | ForEach-Object -Process {
-            Write-Verbose -Message ($this.localizedData.SetProperty -f $_, $setDnsServerScavengingParameters.$_)
-        }
-
-        if ($this.DnsServer -ne 'localhost')
+        if ($propertiesNotInDesiredState)
         {
-            $setDnsServerScavengingParameters['ComputerName'] = $this.DnsServer
-        }
+            $setDnsServerScavengingParameters = $this.GetDesiredStateForSplatting($propertiesNotInDesiredState)
 
-        Set-DnsServerScavenging @setDnsServerScavengingParameters
+            $setDnsServerScavengingParameters.Keys | ForEach-Object -Process {
+                Write-Verbose -Message ($this.localizedData.SetProperty -f $_, $setDnsServerScavengingParameters.$_)
+            }
+
+            if ($this.DnsServer -ne 'localhost')
+            {
+                $setDnsServerScavengingParameters['ComputerName'] = $this.DnsServer
+            }
+
+            Set-DnsServerScavenging @setDnsServerScavengingParameters
+        }
+        else
+        {
+            Write-Verbose -Message $this.localizedData.NoPropertiesToSet
+        }
     }
 
     [System.Boolean] Test()
