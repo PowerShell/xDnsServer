@@ -28,9 +28,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     and that the DSC resources requires the [DnsServer](https://docs.microsoft.com/en-us/powershell/module/dnsserver)
     PowerShell module ([issue #37](https://github.com/dsccommunity/xDnsServer/issues/37)).
   - Added the base class `ResourcePropertiesBase` to hold DSC properties that
-    should be inherited for all class-based resources.
+    can be inherited for all class-based resources.
+  - Added the base class `ResourceBase` to hold methods that should be
+    inherited for all class-based resources.
   - Added new private function `ConvertTo-TimeSpan` to help when evaluating
     properties that must be passed as strings and then converted to `[System.TimeSpan]`.
+  - Added `prefix.ps1` that is used to import dependent modules like _DscResource.Common_.
+  - Added new resource
+    - _DnsServerScavenging_ - resource to enforce scavenging settings ([issue #189](https://github.com/dsccommunity/xDnsServer/issues/189)).
 - xDNSServerClientSubnet
   - Added integration tests.
 - xDnsServerPrimaryZone
@@ -76,6 +81,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Only add required role in integration tests pipeline.
   - Updated the pipeline to use new deploy tasks.
   - Revert back to using the latest version of module Sampler for the pipeline ([issue #211](https://github.com/dsccommunity/xDnsServer/issues/211)).
+- DnsRecordBase
+  - Changed class to inherit properties from 'ResourcePropertiesBase`.
 - xDnsRecordSrv
   - Now uses `[CimInstance]::new()` both in the resource code and the resource
     unit test to clone the existing DNS record instead of using the method
