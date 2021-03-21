@@ -59,7 +59,7 @@ class ResourceBase
     }
 
     # Returns a hashtable containing all properties that should be enforced.
-    hidden [System.Collections.Hashtable] Compare()
+    hidden [System.Collections.Hashtable[]] Compare()
     {
         $currentState = $this.Get() | ConvertTo-HashTableFromObject
         $desiredState = $this | ConvertTo-HashTableFromObject
@@ -91,7 +91,7 @@ class ResourceBase
     }
 
     # Returns a hashtable containing all properties that should be enforced.
-    hidden [System.Collections.Hashtable] GetDesiredStateForSplatting([System.Collections.Hashtable] $Properties)
+    hidden [System.Collections.Hashtable] GetDesiredStateForSplatting([System.Collections.Hashtable[]] $Properties)
     {
         $desiredState = @{}
 
