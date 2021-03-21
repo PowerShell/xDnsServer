@@ -76,10 +76,6 @@ class DnsServerScavenging : ResourceBase
     [Nullable[System.DateTime]]
     $LastScavengeTime
 
-    # hidden [Nullable[System.TimeSpan]] $_scavengingState = $null
-    # hidden [Nullable[System.TimeSpan]] $_refreshInterval = $null
-    # hidden [Nullable[System.TimeSpan]] $_noRefreshInterval = $null
-
     # Default constructor.
     DnsServerScavenging() : base ()
     {
