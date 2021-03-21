@@ -24,16 +24,20 @@ class ResourceBase
         $this.localizedData = Get-LocalizedData -DefaultUICulture 'en-US' -FileName $localizedDataFileName
     }
 
-    [ResourceBase] Get([Microsoft.Management.Infrastructure.CimInstance] $CurrentState)
+    [ResourceBase] Get([Microsoft.Management.Infrastructure.CimInstance] $CommandProperties)
     {
         $dscResourceObject = [System.Activator]::CreateInstance($this.GetType())
 
-        $dscResourceObject.DnsServer = $this.DnsServer
-
         foreach ($propertyName in $this.PSObject.Properties.Name)
         {
-            $dscResourceObject.$propertyName = $CurrentState.$propertyName
+            if ($propertyName -in @($CommandProperties.PSObject.Properties.Name))
+            {
+                $dscResourceObject.$propertyName = $CommandProperties.$propertyName
+            }
         }
+
+        # Always set this as it won't be in the $CommandProperties
+        $dscResourceObject.DnsServer = $this.DnsServer
 
         return $dscResourceObject
     }

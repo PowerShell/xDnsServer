@@ -21,11 +21,6 @@ Get-Module -Name 'DnsServer' -All | Remove-Module -Force
 Import-Module -Name "$PSScriptRoot\..\Stubs\DnsServer.psm1"
 
 Describe 'DnsServerScavenging\Get-TargetResource' -Tag 'Get' {
-    BeforeAll {
-        # Mocks for all context blocks. Avoid if possible.
-    }
-
-    # Context block cannot always be used.
     Context 'When the system is in the desired state' {
         BeforeAll {
             Mock -CommandName Assert-Module -ModuleName $ProjectName
@@ -55,19 +50,112 @@ Describe 'DnsServerScavenging\Get-TargetResource' -Tag 'Get' {
             $getResult = $mockDnsServerScavengingInstance.Get()
 
             $getResult.DnsServer | Should -Be 'localhost'
-            $getResult.ScavengingState |Should -BeTrue
+            $getResult.ScavengingState | Should -BeTrue
+            $getResult.ScavengingInterval | Should -Be '30.00:00:00'
+            $getResult.RefreshInterval | Should -Be '30.00:00:00'
+            $getResult.NoRefreshInterval | Should -Be '30.00:00:00'
+
+            # Returns as a DateTime type and not a string.
+            $getResult.LastScavengeTime.ToString() | Should -Be '2021-01-01 00:00:00'
 
             Assert-MockCalled -CommandName Get-DnsServerScavenging -ModuleName $ProjectName -Exactly -Times 1 -Scope It
         }
     }
+}
 
-    Context 'When the system is the desired state' {
+Describe 'DnsServerScavenging\Get-TargetResource' -Tag 'Test' {
+    BeforeAll {
+        Mock -CommandName Assert-Module -ModuleName $ProjectName
+    }
+
+    Context 'When the system is in the desired state' {
         BeforeAll {
-            # Mocks when the system is in desired state
+            $mockDnsServerScavengingInstance = InModuleScope $ProjectName {
+                [DnsServerScavenging]::new()
+            }
+
+            $mockDnsServerScavengingInstance.ScavengingState = $true
+            $mockDnsServerScavengingInstance.ScavengingInterval = '30.00:00:00'
+            $mockDnsServerScavengingInstance.RefreshInterval = '30.00:00:00'
+            $mockDnsServerScavengingInstance.NoRefreshInterval = '30.00:00:00'
+            $mockDnsServerScavengingInstance.LastScavengeTime = '2021-01-01 00:00:00'
+
+            # Override Get() method
+            $mockDnsServerScavengingInstance |
+                Add-Member -Force -MemberType ScriptMethod -Name Get -Value {
+                    return InModuleScope $ProjectName {
+                        [DnsServerScavenging] @{
+                            DnsServer = 'localhost'
+                            ScavengingState = $true
+                            ScavengingInterval = '30.00:00:00'
+                            RefreshInterval = '30.00:00:00'
+                            NoRefreshInterval = '30.00:00:00'
+                            LastScavengeTime = '2021-01-01 00:00:00'
+                        }
+                    }
+                }
         }
 
-        It 'Should...' {
-            # Test when the system is in the desired state
+        It 'Should return the $true' {
+            $getResult = $mockDnsServerScavengingInstance.Test()
+
+            $getResult | Should -BeTrue
+        }
+    }
+
+    Context 'When the system is not in the desired state' {
+        BeforeAll {
+            $mockDnsServerScavengingInstance = InModuleScope $ProjectName {
+                [DnsServerScavenging]::new()
+            }
+
+            # Override Get() method
+            $mockDnsServerScavengingInstance |
+                Add-Member -Force -MemberType ScriptMethod -Name Get -Value {
+                    return InModuleScope $ProjectName {
+                        [DnsServerScavenging] @{
+                            DnsServer = 'localhost'
+                            ScavengingState = $true
+                            ScavengingInterval = '30.00:00:00'
+                            RefreshInterval = '30.00:00:00'
+                            NoRefreshInterval = '30.00:00:00'
+                            LastScavengeTime = '2021-01-01 00:00:00'
+                        }
+                    }
+                }
+
+            $testCases = @(
+                @{
+                    PropertyName = 'ScavengingState'
+                    PropertyValue = $false
+                }
+                @{
+                    PropertyName = 'ScavengingInterval'
+                    PropertyValue = '7.00:00:00'
+                }
+                @{
+                    PropertyName = 'RefreshInterval'
+                    PropertyValue = '7.00:00:00'
+                }
+                @{
+                    PropertyName = 'NoRefreshInterval'
+                    PropertyValue = '7.00:00:00'
+                }
+            )
+        }
+
+        It 'Should return the $false when property <PropertyName> is not in desired state' -TestCases $testCases {
+            param
+            (
+                $PropertyName,
+                $PropertyValue
+            )
+
+            $mockDnsServerScavengingInstance.$PropertyName = $PropertyValue
+
+            $getResult = $mockDnsServerScavengingInstance.Test()
+
+            $getResult | Should -BeFalse
         }
     }
 }
