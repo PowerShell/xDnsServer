@@ -28,12 +28,7 @@ Describe 'DnsServerScavenging\Get-TargetResource' -Tag 'Get' {
     # Context block cannot always be used.
     Context 'When the system is in the desired state' {
         BeforeAll {
-            $mockDnsServerScavengingInstance = InModuleScope $ProjectName {
-                [DnsServerScavenging]::new()
-            }
-
-            $mockDnsServerScavengingInstance.DnsServer = 'localhost'
-
+            Mock -CommandName Assert-Module -ModuleName $ProjectName
             Mock -CommandName Get-DnsServerScavenging -ModuleName $ProjectName -MockWith {
                 return New-CimInstance -ClassName 'DnsServerScavenging' -Namespace 'root/Microsoft/Windows/DNS' -ClientOnly -Property @{
                     ScavengingState = $true
@@ -43,6 +38,12 @@ Describe 'DnsServerScavenging\Get-TargetResource' -Tag 'Get' {
                     LastScavengeTime = '2021-01-01 00:00:00'
                 }
             }
+
+            $mockDnsServerScavengingInstance = InModuleScope $ProjectName {
+                [DnsServerScavenging]::new()
+            }
+
+            $mockDnsServerScavengingInstance.DnsServer = 'localhost'
         }
 
         It 'Should have correct instantiated the resource class' {
