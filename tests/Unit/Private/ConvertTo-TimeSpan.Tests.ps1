@@ -21,6 +21,15 @@ InModuleScope $ProjectName {
                 $result | Should -BeOfType [System.TimeSpan]
                 $result.Days | Should -Be '234'
             }
+
+            Context 'When passing value in pipeline' {
+                It 'Should return the correct value' {
+                    $result = '234' | ConvertTo-TimeSpan
+                    $result | Should -BeOfType [System.TimeSpan]
+                    $result.Days | Should -Be '234'
+                }
+
+            }
         }
 
         Context 'When converting a invalid string' {
