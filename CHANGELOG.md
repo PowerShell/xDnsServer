@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and `DefaultRefreshInterval` will be removed from the resource xDnsServerSetting
   in the next release (of DnsServerDsc).
   Migrate to use the resource _DnsServerScavenging_ to enforce these properties.
+- The properties `EnableEDnsProbes` and `EDnsCacheTimeout` will be removed from
+  the resource xDnsServerSetting in the next release (of DnsServerDsc) ([issue #195](https://github.com/dsccommunity/xDnsServer/issues/195)).
+  Migrate to use the resource _DnsServerEDns_ to enforce these properties.
 
 ### Added
 
@@ -47,9 +50,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     inherited for all class-based resources.
   - Added new private function `ConvertTo-TimeSpan` to help when evaluating
     properties that must be passed as strings and then converted to `[System.TimeSpan]`.
+  - Added new private function `Assert-TimeSpan` to help assert that a value
+    provided in a resource can be converted to a `[System.TimeSpan]` and
+    optionally evaluates so it is not below a minium value or over a maximum
+    value.
   - Added `prefix.ps1` that is used to import dependent modules like _DscResource.Common_.
   - Added new resource
     - _DnsServerScavenging_ - resource to enforce scavenging settings ([issue #189](https://github.com/dsccommunity/xDnsServer/issues/189)).
+    - _DnsServerEDns_ - resource to enforce extension mechanisms for DNS
+      (EDNS) settings ([issue #194](https://github.com/dsccommunity/xDnsServer/issues/194)).
 - xDNSServerClientSubnet
   - Added integration tests.
 - xDnsServerPrimaryZone

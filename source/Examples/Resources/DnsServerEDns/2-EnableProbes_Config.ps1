@@ -2,7 +2,7 @@
 
 .VERSION 1.0.0
 
-.GUID e3aeafd4-b41a-48e0-b9be-9b5c01f904d3
+.GUID a6427353-df6b-407f-b35c-1aa98822f286
 
 .AUTHOR DSC Community
 
@@ -25,7 +25,7 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Updated author, copyright notice, and URLs.
+First version.
 
 .PRIVATEDATA 2016-Datacenter,2016-Datacenter-Server-Core
 
@@ -35,20 +35,20 @@ Updated author, copyright notice, and URLs.
 
 <#
     .DESCRIPTION
-        This configuration will enable scavenging on the DNS server, using
-        the default interval values.
+        This configuration will enable probes for the extension mechanisms for DNS
+        (EDNS) on the DNS server.
 #>
 
-Configuration EnableScavenging_Config
+Configuration EnableProbes_Config
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
     Node localhost
     {
-        DnsServerScavenging 'EnableScavenging'
+        DnsServerEDns 'EnableProbes'
         {
-            DnsServer       = 'localhost'
-            ScavengingState = $true
+            DnsServer    = 'localhost'
+            EnableProbes = '7.00:00:00'
         }
     }
 }

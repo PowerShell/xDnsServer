@@ -47,10 +47,10 @@ Configuration ChangeScavengingIntervals_Config
     {
         DnsServerScavenging 'ChangeScavengingIntervals'
         {
-            DnsServer = 'localhost'
+            DnsServer          = 'localhost'
             ScavengingInterval = '7.00:00:00'
-            RefreshInterval = '7.00:00:00'
-            NoRefreshInterval = '7.00:00:00'
+            RefreshInterval    = '7.00:00:00'
+            NoRefreshInterval  = '7.00:00:00'
         }
     }
 }

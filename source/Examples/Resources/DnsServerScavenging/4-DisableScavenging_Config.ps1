@@ -46,7 +46,7 @@ Configuration DisableScavenging_Config
     {
         DnsServerScavenging 'DisableScavenging'
         {
-            DnsServer = 'localhost'
+            DnsServer       = 'localhost'
             ScavengingState = $false
         }
     }

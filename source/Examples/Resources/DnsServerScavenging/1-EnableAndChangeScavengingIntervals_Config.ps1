@@ -47,11 +47,11 @@ Configuration EnableAndChangeScavengingIntervals_Config
     {
         DnsServerScavenging 'EnableScavengingAndChangeIntervals'
         {
-            DnsServer = 'localhost'
-            ScavengingState = $true
+            DnsServer          = 'localhost'
+            ScavengingState    = $true
             ScavengingInterval = '7.00:00:00'
-            RefreshInterval = '7.00:00:00'
-            NoRefreshInterval = '7.00:00:00'
+            RefreshInterval    = '7.00:00:00'
+            NoRefreshInterval  = '7.00:00:00'
         }
     }
 }

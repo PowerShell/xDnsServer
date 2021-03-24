@@ -41,7 +41,7 @@ Describe 'DnsServerScavenging\Get()' -Tag 'Get' {
             }
         }
 
-        It 'Should have correct instantiated the resource class' {
+        It 'Should have correctly instantiated the resource class' {
             $mockDnsServerScavengingInstance | Should -Not -BeNullOrEmpty
             $mockDnsServerScavengingInstance.GetType().Name | Should -Be 'DnsServerScavenging'
         }
@@ -95,9 +95,11 @@ Describe 'DnsServerScavenging\Test()' -Tag 'Test' {
 
                 $mockDnsServerScavengingInstance.ScavengingInterval = $mockInvalidTime
 
-                $mockExpectedErrorMessage = $mockDnsServerScavengingInstance.localizedData.PropertyHasWrongFormat -f 'ScavengingInterval', $mockInvalidTime
+                $mockExpectedErrorMessage = InModuleScope $ProjectName {
+                    $script:localizedData.PropertyHasWrongFormat
+                }
 
-                { $mockDnsServerScavengingInstance.Test() } | Should -Throw $mockExpectedErrorMessage
+                { $mockDnsServerScavengingInstance.Test() } | Should -Throw ($mockExpectedErrorMessage -f 'ScavengingInterval', $mockInvalidTime)
             }
         }
 
@@ -107,9 +109,11 @@ Describe 'DnsServerScavenging\Test()' -Tag 'Test' {
 
                 $mockDnsServerScavengingInstance.ScavengingInterval = $mockInvalidTime
 
-                $mockExpectedErrorMessage = $mockDnsServerScavengingInstance.localizedData.TimeSpanExceedMaximumValue -f 'ScavengingInterval', $mockInvalidTime
+                $mockExpectedErrorMessage = InModuleScope $ProjectName {
+                    $script:localizedData.TimeSpanExceedMaximumValue
+                }
 
-                { $mockDnsServerScavengingInstance.Test() } | Should -Throw $mockExpectedErrorMessage
+                { $mockDnsServerScavengingInstance.Test() } | Should -Throw ($mockExpectedErrorMessage  -f 'ScavengingInterval', $mockInvalidTime, '365.00:00:00')
             }
         }
 
@@ -119,9 +123,11 @@ Describe 'DnsServerScavenging\Test()' -Tag 'Test' {
 
                 $mockDnsServerScavengingInstance.ScavengingInterval = $mockInvalidTime
 
-                $mockExpectedErrorMessage = $mockDnsServerScavengingInstance.localizedData.TimeSpanBelowMinimumValue -f 'ScavengingInterval', $mockInvalidTime
+                $mockExpectedErrorMessage = InModuleScope $ProjectName {
+                    $script:localizedData.TimeSpanBelowMinimumValue
+                }
 
-                { $mockDnsServerScavengingInstance.Test() } | Should -Throw $mockExpectedErrorMessage
+                { $mockDnsServerScavengingInstance.Test() } | Should -Throw ($mockExpectedErrorMessage -f 'ScavengingInterval', $mockInvalidTime, '00:00:00')
             }
         }
     }
@@ -238,9 +244,11 @@ Describe 'DnsServerScavenging\Set()' -Tag 'Set' {
 
                 $mockDnsServerScavengingInstance.ScavengingInterval = $mockInvalidTime
 
-                $mockExpectedErrorMessage = $mockDnsServerScavengingInstance.localizedData.PropertyHasWrongFormat -f 'ScavengingInterval', $mockInvalidTime
+                $mockExpectedErrorMessage = InModuleScope $ProjectName {
+                    $script:localizedData.PropertyHasWrongFormat
+                }
 
-                { $mockDnsServerScavengingInstance.Test() } | Should -Throw $mockExpectedErrorMessage
+                { $mockDnsServerScavengingInstance.Test() } | Should -Throw ($mockExpectedErrorMessage -f 'ScavengingInterval', $mockInvalidTime)
             }
         }
 
@@ -250,9 +258,11 @@ Describe 'DnsServerScavenging\Set()' -Tag 'Set' {
 
                 $mockDnsServerScavengingInstance.ScavengingInterval = $mockInvalidTime
 
-                $mockExpectedErrorMessage = $mockDnsServerScavengingInstance.localizedData.TimeSpanExceedMaximumValue -f 'ScavengingInterval', $mockInvalidTime
+                $mockExpectedErrorMessage = InModuleScope $ProjectName {
+                    $script:localizedData.TimeSpanExceedMaximumValue
+                }
 
-                { $mockDnsServerScavengingInstance.Test() } | Should -Throw $mockExpectedErrorMessage
+                { $mockDnsServerScavengingInstance.Test() } | Should -Throw ($mockExpectedErrorMessage  -f 'ScavengingInterval', $mockInvalidTime, '365.00:00:00')
             }
         }
 
@@ -262,9 +272,11 @@ Describe 'DnsServerScavenging\Set()' -Tag 'Set' {
 
                 $mockDnsServerScavengingInstance.ScavengingInterval = $mockInvalidTime
 
-                $mockExpectedErrorMessage = $mockDnsServerScavengingInstance.localizedData.TimeSpanBelowMinimumValue -f 'ScavengingInterval', $mockInvalidTime
+                $mockExpectedErrorMessage = InModuleScope $ProjectName {
+                    $script:localizedData.TimeSpanBelowMinimumValue
+                }
 
-                { $mockDnsServerScavengingInstance.Test() } | Should -Throw $mockExpectedErrorMessage
+                { $mockDnsServerScavengingInstance.Test() } | Should -Throw ($mockExpectedErrorMessage -f 'ScavengingInterval', $mockInvalidTime, '00:00:00')
             }
         }
     }

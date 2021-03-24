@@ -2,7 +2,7 @@
 
 .VERSION 1.0.0
 
-.GUID e3aeafd4-b41a-48e0-b9be-9b5c01f904d3
+.GUID 81765a8e-1b23-4199-9a39-b254807ad129
 
 .AUTHOR DSC Community
 
@@ -25,7 +25,7 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Updated author, copyright notice, and URLs.
+First version.
 
 .PRIVATEDATA 2016-Datacenter,2016-Datacenter-Server-Core
 
@@ -35,20 +35,20 @@ Updated author, copyright notice, and URLs.
 
 <#
     .DESCRIPTION
-        This configuration will enable scavenging on the DNS server, using
-        the default interval values.
+        This configuration will allow to accepts queries for the extension mechanisms
+        for DNS (EDNS) on the DNS server.
 #>
 
-Configuration EnableScavenging_Config
+Configuration EnableReception_Config.ps1
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
     Node localhost
     {
-        DnsServerScavenging 'EnableScavenging'
+        DnsServerEDns 'EnableReception'
         {
             DnsServer       = 'localhost'
-            ScavengingState = $true
+            EnableReception = '7.00:00:00'
         }
     }
 }

@@ -156,29 +156,7 @@ class DnsServerScavenging : ResourceBase
             # Only evaluate properties that have a value.
             if ($null -ne $valueToConvert)
             {
-                $timeSpanObject = $valueToConvert | ConvertTo-TimeSpan
-
-                # If the conversion fails $null is returned.
-                if ($null -eq $timeSpanObject)
-                {
-                    $errorMessage = $this.localizedData.PropertyHasWrongFormat -f $_, $valueToConvert
-
-                    New-InvalidOperationException -Message $errorMessage
-                }
-
-                if ($timeSpanObject -gt [System.TimeSpan] '365.00:00:00')
-                {
-                    $errorMessage = $this.localizedData.TimeSpanExceedMaximumValue -f $_, $timeSpanObject.ToString()
-
-                    New-InvalidOperationException -Message $errorMessage
-                }
-
-                if ($timeSpanObject -lt [System.TimeSpan] '0.00:00:00')
-                {
-                    $errorMessage = $this.localizedData.TimeSpanBelowMinimumValue -f $_, $timeSpanObject.ToString()
-
-                    New-InvalidOperationException -Message $errorMessage
-                }
+                Assert-TimeSpan -PropertyName $_ -Value $valueToConvert -Maximum '365.00:00:00' -Minimum '0.00:00:00'
             }
         }
     }
