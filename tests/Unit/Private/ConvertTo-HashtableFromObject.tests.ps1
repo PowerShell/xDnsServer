@@ -11,7 +11,7 @@ $ProjectName = (Get-ChildItem $ProjectPath\*\*.psd1 | Where-Object -FilterScript
             }) }
 ).BaseName
 
-Import-Module $ProjectName
+Import-Module $ProjectName -Force
 
 InModuleScope $ProjectName {
     Describe 'Helper function ConvertTo-HashtableFromObject' -Tag 'Private' {
