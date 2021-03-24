@@ -48,7 +48,7 @@ Configuration EnableReception_Config.ps1
         DnsServerEDns 'EnableReception'
         {
             DnsServer       = 'localhost'
-            EnableReception = '7.00:00:00'
+            EnableReception = $true
         }
     }
 }

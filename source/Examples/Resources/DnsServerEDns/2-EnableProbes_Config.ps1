@@ -48,7 +48,7 @@ Configuration EnableProbes_Config
         DnsServerEDns 'EnableProbes'
         {
             DnsServer    = 'localhost'
-            EnableProbes = '7.00:00:00'
+            EnableProbes = $true
         }
     }
 }
