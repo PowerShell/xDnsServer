@@ -110,7 +110,7 @@ try
                         -and $_.ResourceId -eq $resourceId
                 }
 
-                $resourceCurrentState.EnableProbes | Should -BeFalse
+                $resourceCurrentState.EnableProbes | Should -BeTrue
             }
 
             It 'Should return ''True'' when Test-DscConfiguration is run' {
@@ -251,7 +251,7 @@ try
                         -and $_.ResourceId -eq $resourceId
                 }
 
-                $resourceCurrentState.CacheTimeout | Should -Be '0.00:30:00'
+                $resourceCurrentState.CacheTimeout | Should -Be '00:30:00'
             }
 
             It 'Should return ''True'' when Test-DscConfiguration is run' {

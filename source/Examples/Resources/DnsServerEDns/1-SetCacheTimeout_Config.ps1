@@ -48,7 +48,7 @@ Configuration SetCacheTimeout_Config
         DnsServerEDns 'SetCacheTimeout'
         {
             DnsServer    = 'localhost'
-            CacheTimeout = '0.00:15:00'
+            CacheTimeout = '00:15:00'
         }
     }
 }

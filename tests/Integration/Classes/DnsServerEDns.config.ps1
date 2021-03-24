@@ -92,7 +92,7 @@ configuration DnsServerEDns_SetCacheTimeout_Config
         DnsServerEDns 'Integration_Test'
         {
             DnsServer    = 'localhost'
-            CacheTimeout = '0.00:30:00'
+            CacheTimeout = '00:30:00'
         }
     }
 }
