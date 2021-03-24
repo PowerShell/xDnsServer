@@ -11,7 +11,7 @@ $ConfigurationData = @{
     .SYNOPSIS
         Disables probes.
 #>
-configuration DnsServerScavenging_DisableProbes_Config
+configuration DnsServerEDns_DisableProbes_Config
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
@@ -29,7 +29,7 @@ configuration DnsServerScavenging_DisableProbes_Config
     .SYNOPSIS
         Enabled probes.
 #>
-configuration DnsServerScavenging_EnableProbes_Config
+configuration DnsServerEDns_EnableProbes_Config
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
@@ -47,7 +47,7 @@ configuration DnsServerScavenging_EnableProbes_Config
     .SYNOPSIS
         Disables reception.
 #>
-configuration DnsServerScavenging_DisableReception_Config
+configuration DnsServerEDns_DisableReception_Config
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
@@ -65,7 +65,7 @@ configuration DnsServerScavenging_DisableReception_Config
     .SYNOPSIS
         Enabled reception.
 #>
-configuration DnsServerScavenging_EnableReception_Config
+configuration DnsServerEDns_EnableReception_Config
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
@@ -83,7 +83,7 @@ configuration DnsServerScavenging_EnableReception_Config
     .SYNOPSIS
         Set cache timeout.
 #>
-configuration DnsServerScavenging_SetCacheTimeout_Config
+configuration DnsServerEDns_SetCacheTimeout_Config
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
