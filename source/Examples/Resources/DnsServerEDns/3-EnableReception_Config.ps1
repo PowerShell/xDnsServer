@@ -39,7 +39,7 @@ First version.
         for DNS (EDNS) on the DNS server.
 #>
 
-Configuration EnableReception_Config.ps1
+Configuration EnableReception_Config
 {
     Import-DscResource -ModuleName 'xDnsServer'
 
