@@ -21,18 +21,18 @@ about: If you have a problem, bug, or enhancement with a resource in this resour
     You may remove this comment block, and the other comment blocks,
     but please keep the headers.
 -->
-#### Details of the scenario you tried and the problem that is occurring
+### Details of the scenario you tried and the problem that is occurring
 
-#### Verbose logs showing the problem
+### Verbose logs showing the problem
 
-#### Suggested solution to the issue
+### Suggested solution to the issue
 
-#### The DSC configuration that is used to reproduce the issue (as detailed as possible)
+### The DSC configuration that is used to reproduce the issue (as detailed as possible)
 ```powershell
 # insert configuration here
 ```
 
-#### The operating system the target node is running
+### The operating system the target node is running
 <!--
     Please provide as much as possible about the target node, for example
     edition, version, build and language.
@@ -48,15 +48,14 @@ about: If you have a problem, bug, or enhancement with a resource in this resour
         'OsMuiLanguages')
 -->
 
-#### Version and build of PowerShell the target node is running
+### Version and build of PowerShell the target node is running
 <!--
     To help with this information, please run this command:
     $PSVersionTable
 -->
 
-#### Version of the DSC module that was used
+### Version of the DSC module that was used
 <!--
     To help with this information, please run this command:
     Get-Module -Name 'xDnsServer' -ListAvailable | ft Name,Version,Path
 -->
-

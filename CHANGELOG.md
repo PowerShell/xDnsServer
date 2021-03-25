@@ -111,6 +111,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Only add required role in integration tests pipeline.
   - Updated the pipeline to use new deploy tasks.
   - Revert back to using the latest version of module Sampler for the pipeline ([issue #211](https://github.com/dsccommunity/xDnsServer/issues/211)).
+  - Fixed the sections in the GitHub issue and pull request templates to
+    have a bit higher font size. This makes it easier to distinguish the
+    section headers from the text.
 - DnsRecordBase
   - Changed class to inherit properties from 'ResourcePropertiesBase`.
 - xDnsRecordSrv
