@@ -44,7 +44,7 @@ Configuration SetCacheSettings_Config
 
     Node localhost
     {
-        DnsServerEDns 'SetCacheTimeout'
+        DnsServerCache 'SetCacheSettings'
         {
             DnsServer                        = 'localhost'
             EnablePollutionProtection        = $true
