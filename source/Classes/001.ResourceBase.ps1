@@ -19,9 +19,7 @@ class ResourceBase
     {
         Assert-Module -ModuleName 'DnsServer'
 
-        $localizedDataFileName = ('{0}.strings.psd1' -f $this.GetType().Name)
-
-        $this.localizedData = Get-LocalizedData -DefaultUICulture 'en-US' -FileName $localizedDataFileName
+        $this.localizedData = Get-LocalizedDataRecursive -ClassName ($this | Get-ClassName -Recursive)
     }
 
     [ResourceBase] Get([Microsoft.Management.Infrastructure.CimInstance] $CommandProperties)

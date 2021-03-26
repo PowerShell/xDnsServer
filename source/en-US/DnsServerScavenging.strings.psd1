@@ -11,5 +11,4 @@ ConvertFrom-StringData @'
     NotInDesiredState = The scavenging settings for the server '{0}' is not in desired state. (DSS0004)
     InDesiredState = The scavenging settings for the server '{0}' is in desired state. (DSS0005)
     SetProperty = The scavenging property '{0}' will be set to '{1}'. (DSS0006)
-    NoPropertiesToSet = All properties are in desired state. (DSS0009)
 '@
