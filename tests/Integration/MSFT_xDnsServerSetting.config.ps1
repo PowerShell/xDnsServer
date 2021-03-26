@@ -20,9 +20,6 @@ $ConfigurationData = @{
             AutoConfigFileZones       = 1
             BindSecondaries           = $false
             BootMethod                = 3
-            DefaultAgingState         = $false
-            DefaultNoRefreshInterval  = 168
-            DefaultRefreshInterval    = 168
             DisableAutoReverseZones   = $false
             DisjointNets              = $false
             DsPollingInterval         = 180
@@ -32,8 +29,6 @@ $ConfigurationData = @{
             EnableDnsSec              = 1
             EnableEDnsProbes          = $true
             ForwardDelegations        = 0
-            Forwarders                = @('168.63.129.16')
-            ForwardingTimeout         = 3
             IsSlave                   = $false
             <#
                 At least one of the listening IP addresses that is specified must
@@ -51,7 +46,6 @@ $ConfigurationData = @{
             RecursionTimeout          = 8
             RoundRobin                = $true
             RpcProtocol               = 5
-            ScavengingInterval        = 168
             SecureResponses           = $true
             SendPort                  = 0
             StrictFileParsing         = $false
@@ -79,9 +73,6 @@ Configuration MSFT_xDnsServerSetting_SetSettings_config
             AutoConfigFileZones       = $Node.AutoConfigFileZones
             BindSecondaries           = $Node.BindSecondaries
             BootMethod                = $Node.BootMethod
-            DefaultAgingState         = $Node.DefaultAgingState
-            DefaultNoRefreshInterval  = $Node.DefaultNoRefreshInterval
-            DefaultRefreshInterval    = $Node.DefaultRefreshInterval
             DisableAutoReverseZones   = $Node.DisableAutoReverseZones
             DisjointNets              = $Node.DisjointNets
             DsPollingInterval         = $Node.DsPollingInterval
@@ -91,8 +82,6 @@ Configuration MSFT_xDnsServerSetting_SetSettings_config
             EnableDnsSec              = $Node.EnableDnsSec
             EnableEDnsProbes          = $Node.EnableEDnsProbes
             ForwardDelegations        = $Node.ForwardDelegations
-            Forwarders                = $Node.Forwarders
-            ForwardingTimeout         = $Node.ForwardingTimeout
             IsSlave                   = $Node.IsSlave
             ListenAddresses           = $Node.ListenAddresses
             LocalNetPriority          = $Node.LocalNetPriority
@@ -106,7 +95,6 @@ Configuration MSFT_xDnsServerSetting_SetSettings_config
             RecursionTimeout          = $Node.RecursionTimeout
             RoundRobin                = $Node.RoundRobin
             RpcProtocol               = $Node.RpcProtocol
-            ScavengingInterval        = $Node.ScavengingInterval
             SecureResponses           = $Node.SecureResponses
             SendPort                  = $Node.SendPort
             StrictFileParsing         = $Node.StrictFileParsing

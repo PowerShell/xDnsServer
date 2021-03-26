@@ -40,9 +40,6 @@ try
             AutoConfigFileZones       = 4
             BindSecondaries           = $true
             BootMethod                = 1
-            DefaultAgingState         = $true
-            DefaultNoRefreshInterval  = 10
-            DefaultRefreshInterval    = 10
             DisableAutoReverseZones   = $true
             DisjointNets              = $true
             DsPollingInterval         = 10
@@ -52,8 +49,6 @@ try
             EnableDnsSec              = 0
             EnableEDnsProbes          = $false
             ForwardDelegations        = 1
-            Forwarders                = '8.8.8.8'
-            ForwardingTimeout         = 4
             IsSlave                   = $true
             ListenAddresses           = '192.168.0.10', '192.168.0.11'
             LocalNetPriority          = $false
@@ -67,7 +62,6 @@ try
             RecursionTimeout          = 16
             RoundRobin                = $false
             RpcProtocol               = 1
-            ScavengingInterval        = 100
             SecureResponses           = $false
             SendPort                  = 100
             StrictFileParsing         = $true
@@ -93,9 +87,6 @@ try
             AutoConfigFileZones       = 1
             BindSecondaries           = $false
             BootMethod                = 3
-            DefaultAgingState         = $false
-            DefaultNoRefreshInterval  = 168
-            DefaultRefreshInterval    = 168
             DisableAutoReverseZones   = $false
             DisjointNets              = $false
             DsAvailable               = $true
@@ -106,8 +97,6 @@ try
             EnableDnsSec              = 1
             EnableEDnsProbes          = $true
             ForwardDelegations        = 0
-            Forwarders                = { 168.63.129.16 }
-            ForwardingTimeout         = 3
             IsSlave                   = $false
             ListenAddresses           = $null
             LocalNetPriority          = $true
@@ -121,7 +110,6 @@ try
             RecursionTimeout          = 8
             RoundRobin                = $true
             RpcProtocol               = 5
-            ScavengingInterval        = 168
             SecureResponses           = $true
             SendPort                  = 0
             ServerAddresses           = 'fe80::7da3:a014:6581:2cdc', '10.0.0.4'

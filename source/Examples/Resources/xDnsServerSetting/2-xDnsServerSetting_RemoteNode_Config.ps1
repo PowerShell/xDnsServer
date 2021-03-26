@@ -51,14 +51,12 @@ Configuration xDnsServerSetting_RemoteNode_Config
             DnsServer           = 'dns1.company.local'
             ListenAddresses    = '10.0.0.4'
             IsSlave            = $true
-            Forwarders         = @('168.63.129.16', '168.63.129.18')
             RoundRobin         = $true
             LocalNetPriority   = $true
             SecureResponses    = $true
             NoRecursion        = $false
             BindSecondaries    = $false
             StrictFileParsing  = $false
-            ScavengingInterval = 168
             LogLevel           = 50393905
         }
     }

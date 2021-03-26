@@ -6,7 +6,7 @@ Import-Module -Name $script:dnsServerDscCommonPath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 
-$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'MaxCacheTTL', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZones', 'StrictFileParsing', 'ForwardingTimeout', 'NoRecursion', 'ScavengingInterval', 'DisjointNets', 'Forwarders', 'DefaultAgingState', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'EnableEDnsProbes', 'NameCheckFlag', 'EDnsCacheTimeout', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'RecursionTimeout', 'ListenAddresses', 'DsTombstoneInterval', 'RecursionRetry', 'RpcProtocol', 'SecureResponses', 'RoundRobin', 'ForwardDelegations', 'DefaultNoRefreshInterval', 'MaxNegativeCacheTTL', 'DefaultRefreshInterval'
+$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'MaxCacheTTL', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZones', 'StrictFileParsing', 'NoRecursion', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'EnableEDnsProbes', 'NameCheckFlag', 'EDnsCacheTimeout', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'RecursionTimeout', 'ListenAddresses', 'DsTombstoneInterval', 'RecursionRetry', 'RpcProtocol', 'SecureResponses', 'RoundRobin', 'ForwardDelegations', 'MaxNegativeCacheTTL'
 
 <#
     .SYNOPSIS
@@ -75,18 +75,6 @@ function Get-TargetResource
     .PARAMETER BootMethod
         Initialization method for the DNS Server.
 
-    .PARAMETER DefaultAgingState
-        Default ScavengingInterval value set for all Active Directory-integrated
-        zones created on this DNS Server.
-
-    .PARAMETER DefaultNoRefreshInterval
-        No-refresh interval, in hours, set for all Active Directory-integrated zones
-        created on this DNS Server.
-
-    .PARAMETER DefaultRefreshInterval
-        Refresh interval, in hours, set for all Active Directory-integrated zones
-        created on this DNS Server.
-
     .PARAMETER DisableAutoReverseZones
         Indicates whether the DNS Server automatically creates standard reverse look
         up zones.
@@ -123,14 +111,6 @@ function Get-TargetResource
 
     .PARAMETER ForwardDelegations
         Specifies whether queries to delegated sub-zones are forwarded.
-
-    .PARAMETER Forwarders
-        Enumerates the list of IP addresses of Forwarders to which the DNS Server
-        forwards queries.
-
-    .PARAMETER ForwardingTimeout
-        Time, in seconds, a DNS Server forwarding a query will wait for resolution
-        from the forwarder before attempting to resolve the query itself.
 
     .PARAMETER IsSlave
         TRUE if the DNS server does not use recursion when name-resolution through
@@ -176,10 +156,6 @@ function Get-TargetResource
 
     .PARAMETER RpcProtocol
         RPC protocol or protocols over which administrative RPC runs.
-
-    .PARAMETER ScavengingInterval
-        Interval, in hours, between two consecutive scavenging operations performed
-        by the DNS Server.
 
     .PARAMETER SecureResponses
         Indicates whether the DNS Server exclusively saves records of names in the
@@ -238,18 +214,6 @@ function Set-TargetResource
 
         [Parameter()]
         [bool]
-        $DefaultAgingState,
-
-        [Parameter()]
-        [uint32]
-        $DefaultNoRefreshInterval,
-
-        [Parameter()]
-        [uint32]
-        $DefaultRefreshInterval,
-
-        [Parameter()]
-        [bool]
         $DisableAutoReverseZones,
 
         [Parameter()]
@@ -283,14 +247,6 @@ function Set-TargetResource
         [Parameter()]
         [uint32]
         $ForwardDelegations,
-
-        [Parameter()]
-        [string[]]
-        $Forwarders,
-
-        [Parameter()]
-        [uint32]
-        $ForwardingTimeout,
 
         [Parameter()]
         [bool]
@@ -343,10 +299,6 @@ function Set-TargetResource
         [Parameter()]
         [int16]
         $RpcProtocol,
-
-        [Parameter()]
-        [uint32]
-        $ScavengingInterval,
 
         [Parameter()]
         [bool]
@@ -437,18 +389,6 @@ function Set-TargetResource
     .PARAMETER BootMethod
         Initialization method for the DNS Server.
 
-    .PARAMETER DefaultAgingState
-        Default ScavengingInterval value set for all Active Directory-integrated
-        zones created on this DNS Server.
-
-    .PARAMETER DefaultNoRefreshInterval
-        No-refresh interval, in hours, set for all Active Directory-integrated zones
-        created on this DNS Server.
-
-    .PARAMETER DefaultRefreshInterval
-        Refresh interval, in hours, set for all Active Directory-integrated zones
-        created on this DNS Server.
-
     .PARAMETER DisableAutoReverseZones
         Indicates whether the DNS Server automatically creates standard reverse look
         up zones.
@@ -485,14 +425,6 @@ function Set-TargetResource
 
     .PARAMETER ForwardDelegations
         Specifies whether queries to delegated sub-zones are forwarded.
-
-    .PARAMETER Forwarders
-        Enumerates the list of IP addresses of Forwarders to which the DNS Server
-        forwards queries.
-
-    .PARAMETER ForwardingTimeout
-        Time, in seconds, a DNS Server forwarding a query will wait for resolution
-        from the forwarder before attempting to resolve the query itself.
 
     .PARAMETER IsSlave
         TRUE if the DNS server does not use recursion when name-resolution through
@@ -538,10 +470,6 @@ function Set-TargetResource
 
     .PARAMETER RpcProtocol
         RPC protocol or protocols over which administrative RPC runs.
-
-    .PARAMETER ScavengingInterval
-        Interval, in hours, between two consecutive scavenging operations performed
-        by the DNS Server.
 
     .PARAMETER SecureResponses
         Indicates whether the DNS Server exclusively saves records of names in the
@@ -601,18 +529,6 @@ function Test-TargetResource
 
         [Parameter()]
         [bool]
-        $DefaultAgingState,
-
-        [Parameter()]
-        [uint32]
-        $DefaultNoRefreshInterval,
-
-        [Parameter()]
-        [uint32]
-        $DefaultRefreshInterval,
-
-        [Parameter()]
-        [bool]
         $DisableAutoReverseZones,
 
         [Parameter()]
@@ -646,14 +562,6 @@ function Test-TargetResource
         [Parameter()]
         [uint32]
         $ForwardDelegations,
-
-        [Parameter()]
-        [string[]]
-        $Forwarders,
-
-        [Parameter()]
-        [uint32]
-        $ForwardingTimeout,
 
         [Parameter()]
         [bool]
@@ -706,10 +614,6 @@ function Test-TargetResource
         [Parameter()]
         [int16]
         $RpcProtocol,
-
-        [Parameter()]
-        [uint32]
-        $ScavengingInterval,
 
         [Parameter()]
         [bool]

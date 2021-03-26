@@ -26,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added support for inherit localization strings and also able to override
     a localization string that exist in a base class.
 
+### Removed
+
+- xDnsServerSetting
+  - BREAKING CHANGE: The properties `Forwarders` and `ForwardingTimeout` has
+    been removed ([issue #192](https://github.com/dsccommunity/xDnsServer/issues/192)).
+    Use the resource _xDnsServerForwarder_ to enforce these properties.
+
 ## [2.0.0] - 2021-03-26
 
 ### Deprecated
@@ -193,6 +200,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     This is done in preparation to support more settings through the cmdlet
     `Get-DnsServerSetting` for the resource _xDnServerSetting_, and these
     values are not available through that cmdlet.
+  - BREAKING CHANGE: The properties `DefaultAgingState`, `ScavengingInterval`,
+    `DefaultNoRefreshInterval`, and `DefaultRefreshInterval` have been removed.
+    Use the resource _DnsServerScavenging_ to enforce this properties ([issue #193](https://github.com/dsccommunity/xDnsServer/issues/193)).
 
 ### Fixed
 
