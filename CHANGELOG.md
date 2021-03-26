@@ -5,6 +5,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- xDnsServer
+  - Added new resource
+    - _DnsServerCache_ - resource to enforce cache settings ([issue #196](https://github.com/dsccommunity/xDnsServer/issues/196)).
+  - Added new private function `Get-ClassName` that returns the class name
+    or optionally an array with the class name and all inherited base class
+    named.
+  - Added new private function `Get-LocalizedDataRecursive` that gathers
+    all localization strings from an array of class names. This can be used
+    in classes to be able to inherit localization strings from one or more
+    base class. If a localization string key exist in a parent class's
+    localization string file it will override the localization string key
+    in any base class.
+
 ## [2.0.0] - 2021-03-26
 
 ### Deprecated
@@ -61,15 +76,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     provided in a resource can be converted to a `[System.TimeSpan]` and
     optionally evaluates so it is not below a minium value or over a maximum
     value.
-  - Added new private function `Get-ClassName` that returns the class name
-    or optionally an array with the class name and all inherited base class
-    named.
-  - Added new private function `Get-LocalizedDataRecursive` that gathers
-    all localization strings from an array of class names. This can be used
-    in classes to be able to inherit localization strings from one or more
-    base class. If a localization string key exist in a parent class's
-    localization string file it will override the localization string key
-    in any base class.
   - Added `prefix.ps1` that is used to import dependent modules like _DscResource.Common_.
   - Added new resource
     - _DnsServerScavenging_ - resource to enforce scavenging settings ([issue #189](https://github.com/dsccommunity/xDnsServer/issues/189)).
