@@ -156,23 +156,8 @@ class DnsServerCache : ResourceBase
 
     [System.Boolean] Test()
     {
-        $this.AssertProperties()
-
-        Write-Verbose -Message ($this.localizedData.TestDesiredState -f $this.DnsServer)
-
         # Call the base method to test all of the properties that should be enforced.
-        $isInDesiredState = ([ResourceBase] $this).Test()
-
-        if ($isInDesiredState)
-        {
-            Write-Verbose -Message ($this.localizedData.InDesiredState -f $this.DnsServer)
-        }
-        else
-        {
-            Write-Verbose -Message ($this.localizedData.NotInDesiredState -f $this.DnsServer)
-        }
-
-        return $isInDesiredState
+        return ([ResourceBase] $this).Test()
     }
 
     hidden [void] AssertProperties()

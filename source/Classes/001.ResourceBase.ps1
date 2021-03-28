@@ -22,6 +22,45 @@ class ResourceBase
         $this.localizedData = Get-LocalizedDataRecursive -ClassName ($this | Get-ClassName -Recurse)
     }
 
+    [ResourceBase] Get()
+    {
+        Write-Verbose -Message ($this.localizedData.GetCurrentState -f $this.DnsServer)
+
+        # Get all key properties.
+        $keyProperty = $this |
+            Get-Member -MemberType 'Property' |
+            Select-Object -ExpandProperty Name |
+            Where-Object -FilterScript {
+                $this.GetType().GetMember($_).CustomAttributes.Where( { $_.NamedArguments.MemberName -eq 'Key' }).NamedArguments.TypedValue.Value -eq $true
+            }
+
+        $getParameters = @{}
+
+        # Set each key property to its value (property DnsServer is handled below).
+        $keyProperty |
+            Where-Object -FilterScript {
+                $_ -ne 'DnsServer'
+            } |
+            ForEach-Object -Process {
+                $getParameters[$_] = $this.$_
+            }
+
+        # Set ComputerName depending on value of DnsServer.
+        if ($this.DnsServer -ne 'localhost')
+        {
+            $getParameters['ComputerName'] = $this.DnsServer
+        }
+
+        $getCurrentStateResult = $this.GetCurrentState($getParameters)
+
+        # Call the overloaded method Get() to get the properties to return.
+        return ([ResourceBase] $this).Get($getCurrentStateResult)
+    }
+
+    <#
+        This overloaded method should be merged together with Get() above when
+        no resource uses it directly.
+    #>
     [ResourceBase] Get([Microsoft.Management.Infrastructure.CimInstance] $CommandProperties)
     {
         $dscResourceObject = [System.Activator]::CreateInstance($this.GetType())
@@ -42,10 +81,44 @@ class ResourceBase
 
     [void] Set()
     {
+        $this.AssertProperties()
+
+        Write-Verbose -Message ($this.localizedData.SetDesiredState -f $this.DnsServer)
+
+        # Call the Compare method to get enforced properties that are not in desired state.
+        $propertiesNotInDesiredState = $this.Compare()
+
+        if ($propertiesNotInDesiredState)
+        {
+            $setDnsServerRecursionParameters = $this.GetDesiredStateForSplatting($propertiesNotInDesiredState)
+
+            $setDnsServerRecursionParameters.Keys | ForEach-Object -Process {
+                Write-Verbose -Message ($this.localizedData.SetProperty -f $_, $setDnsServerRecursionParameters.$_)
+            }
+
+            if ($this.DnsServer -ne 'localhost')
+            {
+                $setDnsServerRecursionParameters['ComputerName'] = $this.DnsServer
+            }
+
+            <#
+                Call the Modify() method with the properties that should be enforced
+                and was not in desired state.
+            #>
+            $this.Modify($setDnsServerRecursionParameters)
+        }
+        else
+        {
+            Write-Verbose -Message $this.localizedData.NoPropertiesToSet
+        }
     }
 
     [System.Boolean] Test()
     {
+        Write-Verbose -Message ($this.localizedData.TestDesiredState -f $this.DnsServer)
+
+        $this.AssertProperties()
+
         $isInDesiredState = $true
 
         <#
@@ -59,10 +132,22 @@ class ResourceBase
             $isInDesiredState = $false
         }
 
+        if ($isInDesiredState)
+        {
+            Write-Verbose -Message ($this.localizedData.InDesiredState -f $this.DnsServer)
+        }
+        else
+        {
+            Write-Verbose -Message ($this.localizedData.NotInDesiredState -f $this.DnsServer)
+        }
+
         return $isInDesiredState
     }
 
-    # Returns a hashtable containing all properties that should be enforced.
+    <#
+        Returns a hashtable containing all properties that should be enforced.
+        This method should normally not be overridden.
+    #>
     hidden [System.Collections.Hashtable[]] Compare()
     {
         $currentState = $this.Get() | ConvertTo-HashTableFromObject
@@ -104,5 +189,22 @@ class ResourceBase
         }
 
         return $desiredState
+    }
+
+    # This method can be overridden if resource specific asserts are needed.
+    hidden [void] AssertProperties()
+    {
+    }
+
+    # This method must be overridden by a resource.
+    hidden [void] Modify([System.Collections.Hashtable] $properties)
+    {
+        throw $this.localizedData.ModifyMethodNotImplemented
+    }
+
+    # This method must be overridden by a resource.
+    hidden [Microsoft.Management.Infrastructure.CimInstance] GetCurrentState([System.Collections.Hashtable] $properties)
+    {
+        throw $this.localizedData.GetCurrentStateMethodNotImplemented
     }
 }

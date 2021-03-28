@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DnsServerDsc
   - Added new resource
     - _DnsServerCache_ - resource to enforce cache settings ([issue #196](https://github.com/dsccommunity/DnsServerDsc/issues/196)).
+    - _DnsServerRecursion_ - resource to enforce recursion settings ([issue #198](https://github.com/dsccommunity/DnsServerDsc/issues/198)).
   - Added new private function `Get-ClassName` that returns the class name
     or optionally an array with the class name and all inherited base class
     named.
@@ -41,7 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - DnsServerDsc
   - BREAKING CHANGE: Renamed the module to DnsServerDsc ([issue #179](https://github.com/dsccommunity/DnsServerDsc/issues/179)).
-  - BREAKING CHANGE: Removed the prefix 'x' from all MOF-based resources ([issue #179](https://github.com/dsccommunity/DnsServerDsc/issues/179)).
+  - BREAKING CHANGE: Removed the prefix 'x' from all MOF-based resources
+    ([issue #179](https://github.com/dsccommunity/DnsServerDsc/issues/179)).
   - Renamed a MOF-based resource to use the prefix 'DSC' ([issue #225](https://github.com/dsccommunity/DnsServerDsc/issues/225)).
   - Fix stub `Get-DnsServerResourceRecord` so it throws if it is not mocked
     correctly ([issue #204](https://github.com/dsccommunity/DnsServerDsc/issues/204)).
@@ -50,6 +52,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ResourceBase
   - Added support for inherit localization strings and also able to override
     a localization string that exist in a base class.
+  - Moved more logic from the resources into the base class for the method
+    `Test()`, `Get()`, and `Set()`. The base class now have three methods
+    `AssertProperties()`, `Modify()`, and `GetCurrentState()` where the
+    two latter ones must be overridden by a resource if calling the base
+    methods `Set()` and `Get()`.
 - Integration tests
   - Added commands in the DnsRecord* integration tests to wait for the LCM
     before moving to the next test.
