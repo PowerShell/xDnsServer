@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - BREAKING CHANGE: The properties `Forwarders` and `ForwardingTimeout` has
     been removed ([issue #192](https://github.com/dsccommunity/DnsServerDsc/issues/192)).
     Use the resource _DnsServerForwarder_ to enforce these properties.
+  - BREAKING CHANGE: The properties `SecureResponses`, `MaxCacheTTL`, and
+    `MaxNegativeCacheTTL` has been removed (issue #195). To enforce theses
+    properties, use resource _DnsServerEDns_ using the properties
+    `EnablePollutionProtection`, `MaxTtl`, and `MaxNegativeTtl` respectively.
 
 ### Added
 

@@ -22,15 +22,12 @@ class DSC_DnsServerSetting : OMI_BaseResource
     [Write, Description("Indicates whether the DNS Server gives priority to the local net address when returning A records.")] Boolean LocalNetPriority;
     [Write, Description("Indicates which policies are activated in the Event Viewer system log.")] Uint32 LogLevel;
     [Write, Description("Indicates whether the DNS Server performs loose wildcarding.")] Boolean LooseWildcarding;
-    [Write, Description("Maximum time, in seconds, the record of a recursive name query may remain in the DNS Server cache.")] Uint32 MaxCacheTTL;
-    [Write, Description("Maximum time, in seconds, a name error result from a recursive query may remain in the DNS Server cache.")] Uint32 MaxNegativeCacheTTL;
     [Write, Description("Indicates the set of eligible characters to be used in DNS names.")] Uint32 NameCheckFlag;
     [Write, Description("Indicates whether the DNS Server performs recursive look ups. TRUE indicates recursive look ups are not performed.")] Boolean NoRecursion;
     [Write, Description("Elapsed seconds before retrying a recursive look up.")] Uint32 RecursionRetry;
     [Write, Description("Elapsed seconds before the DNS Server gives up recursive query.")] Uint32 RecursionTimeout;
     [Write, Description("Indicates whether the DNS Server round robins multiple A records.")] Boolean RoundRobin;
     [Write, Description("RPC protocol or protocols over which administrative RPC runs.")] Sint16 RpcProtocol;
-    [Write, Description("Indicates whether the DNS Server exclusively saves records of names in the same subtree as the server that provided them.")] Boolean SecureResponses;
     [Write, Description("Port on which the DNS Server sends UDP queries to other servers.")] Uint32 SendPort;
     [Write, Description("Indicates whether the DNS Server parses zone files strictly.")] Boolean StrictFileParsing;
     [Write, Description("Restricts the type of records that can be dynamically updated on the server, used in addition to the AllowUpdate settings on Server and Zone objects.")] Uint32 UpdateOptions;
