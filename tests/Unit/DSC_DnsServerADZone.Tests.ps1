@@ -69,6 +69,7 @@ try
             Mock -CommandName 'Assert-Module'
 
             It 'Returns a "System.Collections.Hashtable" object type with schema properties' {
+                Mock -CommandName Get-DnsServerZone -MockWith { return $fakeDnsADZone }
                 $targetResource = Get-TargetResource @testParams -ReplicationScope $testReplicationScope
                 $targetResource -is [System.Collections.Hashtable] | Should Be $true
 
