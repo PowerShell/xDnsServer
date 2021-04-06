@@ -64,14 +64,14 @@ Configuration DSC_DnsServerSetting_SetSettings_config
             BindSecondaries           = $Node.BindSecondaries
             BootMethod                = $Node.BootMethod
             DisableAutoReverseZone    = $Node.DisableAutoReverseZone
-            DisjointNets              = $Node.DisjointNets
+            #DisjointNets              = $Node.DisjointNets
             EnableDirectoryPartitions = $Node.EnableDirectoryPartitions
             EnableDnsSec              = $Node.EnableDnsSec
             ForwardDelegations        = $Node.ForwardDelegations
-            IsSlave                   = $Node.IsSlave
+            #IsSlave                   = $Node.IsSlave
             ListeningIPAddress        = $Node.ListeningIPAddress
             LocalNetPriority          = $Node.LocalNetPriority
-            LogLevel                  = $Node.LogLevel
+            #LogLevel                  = $Node.LogLevel
             LooseWildcarding          = $Node.LooseWildcarding
             NameCheckFlag             = $Node.NameCheckFlag
             RoundRobin                = $Node.RoundRobin
