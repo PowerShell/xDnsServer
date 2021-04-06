@@ -6,7 +6,7 @@ Import-Module -Name $script:dnsServerDscCommonPath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 
-$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZone', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListenAddresses', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
+$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZone', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListeningIPAddress', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
 
 <#
     .SYNOPSIS
