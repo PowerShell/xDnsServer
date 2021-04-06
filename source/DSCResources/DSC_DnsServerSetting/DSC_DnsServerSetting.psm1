@@ -274,7 +274,7 @@ function Set-TargetResource
         $setDnServerSettingParameters['ComputerName'] = $DnsServer
     }
 
-    Set-DnServerSetting @setDnServerSettingParameters -ErrorAction 'Stop'
+    Set-DnsServerSetting @setDnServerSettingParameters -ErrorAction 'Stop'
 }
 
 <#
