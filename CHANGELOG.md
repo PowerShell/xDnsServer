@@ -64,8 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     correctly ([issue #204](https://github.com/dsccommunity/DnsServerDsc/issues/204)).
   - Switch the order in the deploy pipeline so that creating the GitHub release
     is made after a successful release.
-  - Updated stub function to throw if they are used (instead of being mocked)
-    ([issue #235](https://github.com/dsccommunity/DnsServerDsc/issues/235)).
+  - Updated stub functions to throw if they are used (when missing a mock in
+    unit test) ([issue #235](https://github.com/dsccommunity/DnsServerDsc/issues/235)).
 - ResourceBase
   - Added support for inherit localization strings and also able to override
     a localization string that exist in a base class.
