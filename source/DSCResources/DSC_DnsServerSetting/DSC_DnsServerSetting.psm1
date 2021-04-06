@@ -6,7 +6,7 @@ Import-Module -Name $script:dnsServerDscCommonPath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 
-$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZone', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListenAddresses', 'DsTombstoneInterval', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
+$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZone', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListenAddresses', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
 
 <#
     .SYNOPSIS
@@ -91,13 +91,6 @@ function Get-TargetResource
     .PARAMETER DisjointNets
         Indicates whether the default port binding for a socket used to send queries
         to remote DNS Servers can be overridden.
-
-    .PARAMETER DsPollingInterval
-        Interval, in seconds, to poll the DS-integrated zones.
-
-    .PARAMETER DsTombstoneInterval
-        Lifetime of tombstoned records in Directory Service integrated zones,
-        expressed in seconds.
 
     .PARAMETER EnableDirectoryPartitions
         Specifies whether support for application directory partitions is enabled on
@@ -197,14 +190,6 @@ function Set-TargetResource
         $DisjointNets,
 
         [Parameter()]
-        [uint32]
-        $DsPollingInterval,
-
-        [Parameter()]
-        [uint32]
-        $DsTombstoneInterval,
-
-        [Parameter()]
         [bool]
         $EnableDirectoryPartitions,
 
@@ -275,32 +260,21 @@ function Set-TargetResource
 
     $dnsProperties = Remove-CommonParameter -Hashtable $PSBoundParameters
 
-    $dnsServerInstance = Get-CimClassMicrosoftDnsServer -DnsServer $DnsServer
+    $setDnServerSettingParameters = @{}
 
-    try
+    foreach ($property in $dnsProperties.keys)
     {
-        foreach ($property in $dnsProperties.keys)
-        {
-            Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
-        }
+        $setDnServerSettingParameters[$property] = $dnsProperties
 
-        $setCimInstanceParameters = @{
-            InputObject   = $dnsServerInstance
-            Property   = $dnsProperties
-            ErrorAction = 'Stop'
-        }
-
-        if ($DnsServer -ne 'localhost')
-        {
-            $setCimInstanceParameters['ComputerName'] = $DnsServer
-        }
-
-        Set-CimInstance @setCimInstanceParameters
+        Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
     }
-    catch
+
+    if ($DnsServer -ne 'localhost')
     {
-        throw $_
+        $setDnServerSettingParameters['ComputerName'] = $DnsServer
     }
+
+    Set-DnServerSetting @setDnServerSettingParameters -ErrorAction 'Stop'
 }
 
 <#
@@ -340,13 +314,6 @@ function Set-TargetResource
     .PARAMETER DisjointNets
         Indicates whether the default port binding for a socket used to send queries
         to remote DNS Servers can be overridden.
-
-    .PARAMETER DsPollingInterval
-        Interval, in seconds, to poll the DS-integrated zones.
-
-    .PARAMETER DsTombstoneInterval
-        Lifetime of tombstoned records in Directory Service integrated zones,
-        expressed in seconds.
 
     .PARAMETER EnableDirectoryPartitions
         Specifies whether support for application directory partitions is enabled on
@@ -447,14 +414,6 @@ function Test-TargetResource
         $DisjointNets,
 
         [Parameter()]
-        [uint32]
-        $DsPollingInterval,
-
-        [Parameter()]
-        [uint32]
-        $DsTombstoneInterval,
-
-        [Parameter()]
         [bool]
         $EnableDirectoryPartitions,
 
@@ -528,33 +487,6 @@ function Test-TargetResource
     $result = Test-DscDnsParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -TurnOffTypeChecking -Verbose:$VerbosePreference
 
     return $result
-}
-
-function Get-CimClassMicrosoftDnsServer
-{
-    [CmdletBinding()]
-    [OutputType([Microsoft.Management.Infrastructure.CimInstance])]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $DnsServer
-    )
-
-    $getCimInstanceParameters = @{
-        NameSpace   = 'root\MicrosoftDNS'
-        ClassName   = 'MicrosoftDNS_Server'
-        ErrorAction = 'Stop'
-    }
-
-    if ($DnsServer -ne 'localhost')
-    {
-        $getCimInstanceParameters['ComputerName'] = $DnsServer
-    }
-
-    $dnsServerInstance = Get-CimInstance @getCimInstanceParameters
-
-    return $dnsServerInstance
 }
 
 Export-ModuleMember -Function *-TargetResource

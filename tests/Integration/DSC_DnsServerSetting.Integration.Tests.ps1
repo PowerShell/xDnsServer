@@ -73,9 +73,6 @@ try
                 $resourceCurrentState.BindSecondaries            | Should -Be $ConfigurationData.AllNodes.BindSecondaries
                 $resourceCurrentState.BootMethod                 | Should -Be $ConfigurationData.AllNodes.BootMethod
                 $resourceCurrentState.DisableAutoReverseZone     | Should -Be $ConfigurationData.AllNodes.DisableAutoReverseZone
-                #$resourceCurrentState.DisjointNets               | Should -Be $ConfigurationData.AllNodes.DisjointNets
-                #$resourceCurrentState.DsPollingInterval          | Should -Be $ConfigurationData.AllNodes.DsPollingInterval
-                #$resourceCurrentState.DsTombstoneInterval        | Should -Be $ConfigurationData.AllNodes.DsTombstoneInterval
                 $resourceCurrentState.EnableDnsSec               | Should -Be $ConfigurationData.AllNodes.EnableDnsSec
                 $resourceCurrentState.ForwardDelegations         | Should -Be $ConfigurationData.AllNodes.ForwardDelegations
                 $resourceCurrentState.LocalNetPriority           | Should -Be $ConfigurationData.AllNodes.LocalNetPriority
@@ -97,8 +94,6 @@ try
                 # These does not exist in Get-DnsServerSetting https://docs.microsoft.com/en-us/powershell/module/dnsserver/get-dnsserversetting?view=win10-ps,
                 # might need to keep from the CIM class https://docs.microsoft.com/en-us/windows/win32/dns/microsoftdns-server
                 #$resourceCurrentState.DisjointNets               | Should -Be $ConfigurationData.AllNodes.DisjointNets
-                #$resourceCurrentState.DsPollingInterval          | Should -Be $ConfigurationData.AllNodes.DsPollingInterval
-                #$resourceCurrentState.DsTombstoneInterval        | Should -Be $ConfigurationData.AllNodes.DsTombstoneInterval
                 #$resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
                 #$resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
             }

@@ -22,8 +22,6 @@ $ConfigurationData = @{
             BootMethod                = 3
             DisableAutoReverseZone    = $false
             DisjointNets              = $false
-            DsPollingInterval         = 180
-            DsTombstoneInterval       = 1209600
             EnableDirectoryPartitions = $true
             EnableDnsSec              = 1
             ForwardDelegations        = 0
@@ -67,8 +65,6 @@ Configuration DSC_DnsServerSetting_SetSettings_config
             BootMethod                = $Node.BootMethod
             DisableAutoReverseZone    = $Node.DisableAutoReverseZone
             DisjointNets              = $Node.DisjointNets
-            DsPollingInterval         = $Node.DsPollingInterval
-            DsTombstoneInterval       = $Node.DsTombstoneInterval
             EnableDirectoryPartitions = $Node.EnableDirectoryPartitions
             EnableDnsSec              = $Node.EnableDnsSec
             ForwardDelegations        = $Node.ForwardDelegations

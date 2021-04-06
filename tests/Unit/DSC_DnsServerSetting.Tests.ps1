@@ -42,8 +42,6 @@ try
             BootMethod                = 1
             DisableAutoReverseZone    = $true
             DisjointNets              = $true
-            DsPollingInterval         = 10
-            DsTombstoneInterval       = 10
             EnableDirectoryPartitions = $false
             EnableDnsSec              = 0
             ForwardDelegations        = 1
@@ -82,8 +80,6 @@ try
             DisableAutoReverseZone    = $false
             DisjointNets              = $false
             DsAvailable               = $true
-            DsPollingInterval         = 180
-            DsTombstoneInterval       = 1209600
             EnableDirectoryPartitions = $true
             EnableDnsSec              = 1
             ForwardDelegations        = 0
