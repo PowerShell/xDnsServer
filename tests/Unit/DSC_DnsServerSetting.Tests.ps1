@@ -53,9 +53,6 @@ try
             LogLevel                  = 256
             LooseWildcarding          = $true
             NameCheckFlag             = 1
-            NoRecursion               = $false
-            RecursionRetry            = $false
-            RecursionTimeout          = 16
             RoundRobin                = $false
             RpcProtocol               = 1
             SendPort                  = 100
@@ -96,9 +93,6 @@ try
             LogLevel                  = 0
             LooseWildcarding          = $false
             NameCheckFlag             = 2
-            NoRecursion               = $true
-            RecursionRetry            = 3
-            RecursionTimeout          = 8
             RoundRobin                = $true
             RpcProtocol               = 5
             SendPort                  = 0

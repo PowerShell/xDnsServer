@@ -6,7 +6,7 @@ Import-Module -Name $script:dnsServerDscCommonPath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 
-$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZones', 'StrictFileParsing', 'NoRecursion', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'RecursionTimeout', 'ListenAddresses', 'DsTombstoneInterval', 'RecursionRetry', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
+$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZones', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'DsPollingInterval', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListenAddresses', 'DsTombstoneInterval', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
 
 <#
     .SYNOPSIS
@@ -122,16 +122,6 @@ function Get-TargetResource
     .PARAMETER NameCheckFlag
         Indicates the set of eligible characters to be used in DNS names.
 
-    .PARAMETER NoRecursion
-        Indicates whether the DNS Server performs recursive look ups. TRUE indicates
-        recursive look ups are not performed.
-
-    .PARAMETER RecursionRetry
-        Elapsed seconds before retrying a recursive look up.
-
-    .PARAMETER RecursionTimeout
-        Elapsed seconds before the DNS Server gives up recursive query.
-
     .PARAMETER RoundRobin
         Indicates whether the DNS Server round robins multiple A records.
 
@@ -240,18 +230,6 @@ function Set-TargetResource
         [Parameter()]
         [uint32]
         $NameCheckFlag,
-
-        [Parameter()]
-        [bool]
-        $NoRecursion,
-
-        [Parameter()]
-        [uint32]
-        $RecursionRetry,
-
-        [Parameter()]
-        [uint32]
-        $RecursionTimeout,
 
         [Parameter()]
         [bool]
@@ -393,16 +371,6 @@ function Set-TargetResource
     .PARAMETER NameCheckFlag
         Indicates the set of eligible characters to be used in DNS names.
 
-    .PARAMETER NoRecursion
-        Indicates whether the DNS Server performs recursive look ups. TRUE indicates
-        recursive look ups are not performed.
-
-    .PARAMETER RecursionRetry
-        Elapsed seconds before retrying a recursive look up.
-
-    .PARAMETER RecursionTimeout
-        Elapsed seconds before the DNS Server gives up recursive query.
-
     .PARAMETER RoundRobin
         Indicates whether the DNS Server round robins multiple A records.
 
@@ -512,18 +480,6 @@ function Test-TargetResource
         [Parameter()]
         [uint32]
         $NameCheckFlag,
-
-        [Parameter()]
-        [bool]
-        $NoRecursion,
-
-        [Parameter()]
-        [uint32]
-        $RecursionRetry,
-
-        [Parameter()]
-        [uint32]
-        $RecursionTimeout,
 
         [Parameter()]
         [bool]

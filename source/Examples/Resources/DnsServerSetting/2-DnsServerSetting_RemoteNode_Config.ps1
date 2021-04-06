@@ -53,7 +53,6 @@ Configuration DnsServerSetting_RemoteNode_Config
             IsSlave            = $true
             RoundRobin         = $true
             LocalNetPriority   = $true
-            NoRecursion        = $false
             BindSecondaries    = $false
             StrictFileParsing  = $false
             LogLevel           = 50393905

@@ -87,9 +87,6 @@ try
                 $resourceCurrentState.MaxCacheTTL                | Should -Be $ConfigurationData.AllNodes.MaxCacheTTL
                 $resourceCurrentState.MaxNegativeCacheTTL        | Should -Be $ConfigurationData.AllNodes.MaxNegativeCacheTTL
                 $resourceCurrentState.NameCheckFlag              | Should -Be $ConfigurationData.AllNodes.NameCheckFlag
-                $resourceCurrentState.NoRecursion                | Should -Be $ConfigurationData.AllNodes.NoRecursion
-                $resourceCurrentState.RecursionRetry             | Should -Be $ConfigurationData.AllNodes.RecursionRetry
-                $resourceCurrentState.RecursionTimeout           | Should -Be $ConfigurationData.AllNodes.RecursionTimeout
                 $resourceCurrentState.RoundRobin                 | Should -Be $ConfigurationData.AllNodes.RoundRobin
                 $resourceCurrentState.RpcProtocol                | Should -Be $ConfigurationData.AllNodes.RpcProtocol
                 $resourceCurrentState.SecureResponses            | Should -Be $ConfigurationData.AllNodes.SecureResponses

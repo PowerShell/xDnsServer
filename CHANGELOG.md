@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - BREAKING CHANGE: The properties `DefaultAgingState`, `ScavengingInterval`,
     `DefaultNoRefreshInterval`, and `DefaultRefreshInterval` have been removed.
     Use the resource _DnsServerScavenging_ to enforce this properties ([issue #193](https://github.com/dsccommunity/DnsServerDsc/issues/193)).
+  - BREAKING CHANGE: The properties `NoRecursion`, `RecursionRetry`, and
+    `RecursionTimeout` has been removed ([issue #200](https://github.com/dsccommunity/DnsServerDsc/issues/200)).
+    To enforce theses properties, use resource _DnsServerRecursion_ using the
+    properties `Enable`, `RetryInterval`, and `Timeout` respectively.
 - ResourceBase
   - For the method `Get()` the overload that took a `[Microsoft.Management.Infrastructure.CimInstance]`
     was removed as it is not the correct pattern going forward.
