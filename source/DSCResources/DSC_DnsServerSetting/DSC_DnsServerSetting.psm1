@@ -260,11 +260,11 @@ function Set-TargetResource
 
     $dnsProperties = Remove-CommonParameter -Hashtable $PSBoundParameters
 
-    $setDnServerSettingParameters = @{}
+    $setDnServerSettingParameters = Get-DnsServerSetting -All
 
     foreach ($property in $dnsProperties.keys)
     {
-        $setDnServerSettingParameters[$property] = $dnsProperties
+        $setDnServerSettingParameters[$property] = $dnsProperties[$property]
 
         Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
     }
@@ -274,7 +274,7 @@ function Set-TargetResource
         $setDnServerSettingParameters['ComputerName'] = $DnsServer
     }
 
-    Set-DnsServerSetting @setDnServerSettingParameters -ErrorAction 'Stop'
+    $dnsProperties | Set-DnsServerSetting -ErrorAction 'Stop'
 }
 
 <#
