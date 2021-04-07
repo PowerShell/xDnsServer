@@ -264,7 +264,7 @@ function Set-TargetResource
 
     foreach ($property in $dnsProperties.keys)
     {
-        $setDnServerSettingParameters[$property] = $dnsProperties[$property]
+        $setDnServerSettingParameters.$property = $dnsProperties[$property]
 
         Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
     }
