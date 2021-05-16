@@ -6,7 +6,36 @@ Import-Module -Name $script:dnsServerDscCommonPath
 
 $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
 
-$properties = 'LocalNetPriority', 'AutoConfigFileZones', 'AddressAnswerLimit', 'UpdateOptions', 'DisableAutoReverseZone', 'StrictFileParsing', 'DisjointNets', 'EnableDirectoryPartitions', 'XfrConnectTimeout', 'AllowUpdate', 'DsAvailable', 'BootMethod', 'LooseWildcarding', 'BindSecondaries', 'LogLevel', 'AutoCacheUpdate', 'EnableDnsSec', 'NameCheckFlag', 'SendPort', 'WriteAuthorityNS', 'IsSlave', 'ListeningIPAddress', 'RpcProtocol', 'RoundRobin', 'ForwardDelegations'
+$script:classProperties = @(
+    'LocalNetPriority'
+    'AutoConfigFileZones'
+    'AddressAnswerLimit'
+    'UpdateOptions'
+    'DisableAutoReverseZone'
+    'StrictFileParsing'
+    'EnableDirectoryPartitions'
+    'XfrConnectTimeout'
+    'AllowUpdate'
+    'BootMethod'
+    'LooseWildcarding'
+    'BindSecondaries'
+    'AutoCacheUpdate'
+    'EnableDnsSec'
+    'NameCheckFlag'
+    'SendPort'
+    'WriteAuthorityNS'
+    'ListeningIPAddress'
+    'RpcProtocol'
+    'RoundRobin'
+    'ForwardDelegations'
+
+    # Read-only properties
+    'DsAvailable'
+    'MajorVersion'
+    'MinorVersion'
+    'BuildNumber'
+    'IsReadOnlyDC'
+)
 
 <#
     .SYNOPSIS
@@ -44,7 +73,7 @@ function Get-TargetResource
 
     $returnValue = @{}
 
-    foreach ($property in $properties)
+    foreach ($property in $script:classProperties)
     {
         $returnValue.Add($property, $dnsServerInstance."$property")
     }
@@ -64,7 +93,7 @@ function Get-TargetResource
 
     .PARAMETER AddressAnswerLimit
         Maximum number of host records returned in response to an address request.
-        Values between 5 and 28 are valid.
+        Values between 5 and 28, or 0 are valid.
 
     .PARAMETER AllowUpdate
         Specifies whether the DNS Server accepts dynamic update requests.
@@ -88,10 +117,6 @@ function Get-TargetResource
         Indicates whether the DNS Server automatically creates standard reverse look
         up zones.
 
-    .PARAMETER DisjointNets
-        Indicates whether the default port binding for a socket used to send queries
-        to remote DNS Servers can be overridden.
-
     .PARAMETER EnableDirectoryPartitions
         Specifies whether support for application directory partitions is enabled on
         the DNS Server.
@@ -103,10 +128,6 @@ function Get-TargetResource
     .PARAMETER ForwardDelegations
         Specifies whether queries to delegated sub-zones are forwarded.
 
-    .PARAMETER IsSlave
-        TRUE if the DNS server does not use recursion when name-resolution through
-        forwarders fails.
-
     .PARAMETER ListeningIPAddress
         Enumerates the list of IP addresses on which the DNS Server can receive
         queries.
@@ -114,9 +135,6 @@ function Get-TargetResource
     .PARAMETER LocalNetPriority
         Indicates whether the DNS Server gives priority to the local net address
         when returning A records.
-
-    .PARAMETER LogLevel
-        Indicates which policies are activated in the Event Viewer system log.
 
     .PARAMETER LooseWildcarding
         Indicates whether the DNS Server performs loose wildcarding.
@@ -187,10 +205,6 @@ function Set-TargetResource
 
         [Parameter()]
         [bool]
-        $DisjointNets,
-
-        [Parameter()]
-        [bool]
         $EnableDirectoryPartitions,
 
         [Parameter()]
@@ -202,20 +216,12 @@ function Set-TargetResource
         $ForwardDelegations,
 
         [Parameter()]
-        [bool]
-        $IsSlave,
-
-        [Parameter()]
         [string[]]
         $ListeningIPAddress,
 
         [Parameter()]
         [bool]
         $LocalNetPriority,
-
-        [Parameter()]
-        [uint32]
-        $LogLevel,
 
         [Parameter()]
         [bool]
@@ -260,21 +266,55 @@ function Set-TargetResource
 
     $dnsProperties = Remove-CommonParameter -Hashtable $PSBoundParameters
 
-    $setDnServerSettingParameters = Get-DnsServerSetting -All
+    $getDnServerSettingResult = Get-DnsServerSetting -All
+
+    $propertiesInDesiredState = @()
 
     foreach ($property in $dnsProperties.keys)
     {
-        $setDnServerSettingParameters.$property = $dnsProperties[$property]
+        if ($dnsProperties.$property -ne $getDnServerSettingResult.$property)
+        {
+            # Property not in desired state.
 
-        Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
+            Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
+        }
+        else
+        {
+            # Property in desired state.
+
+            Write-Verbose -Message ($script:localizedData.PropertyInDesiredState -f $property)
+
+            $propertiesInDesiredState += $property
+        }
     }
 
-    if ($DnsServer -ne 'localhost')
+    # Remove passed parameters that are in desired state.
+    $propertiesInDesiredState | ForEach-Object -Process {
+        $dnsProperties.Remove($_)
+    }
+
+    if ($dnsProperties.Keys.Count -eq 0)
     {
-        $setDnServerSettingParameters['ComputerName'] = $DnsServer
+        Write-Verbose -Message $script:localizedData.SettingsInDesiredState
     }
+    else
+    {
+        # Set all desired values for the properties that were not in desired state.
+        $dnsProperties.Keys | ForEach-Object -Process {
+            $getDnServerSettingResult.$_ = $dnsProperties.$_
+        }
 
-    $dnsProperties | Set-DnsServerSetting -ErrorAction 'Stop'
+        $setDnServerSettingParameters = @{
+            ErrorAction = 'Stop'
+        }
+
+        if ($DnsServer -ne 'localhost')
+        {
+            $setDnServerSettingParameters['ComputerName'] = $DnsServer
+        }
+
+        $getDnServerSettingResult | Set-DnsServerSetting @setDnServerSettingParameters
+    }
 }
 
 <#
@@ -287,7 +327,7 @@ function Set-TargetResource
 
     .PARAMETER AddressAnswerLimit
         Maximum number of host records returned in response to an address request.
-        Values between 5 and 28 are valid.
+        Values between 5 and 28, or 0 are valid.
 
     .PARAMETER AllowUpdate
         Specifies whether the DNS Server accepts dynamic update requests.
@@ -311,10 +351,6 @@ function Set-TargetResource
         Indicates whether the DNS Server automatically creates standard reverse look
         up zones.
 
-    .PARAMETER DisjointNets
-        Indicates whether the default port binding for a socket used to send queries
-        to remote DNS Servers can be overridden.
-
     .PARAMETER EnableDirectoryPartitions
         Specifies whether support for application directory partitions is enabled on
         the DNS Server.
@@ -326,10 +362,6 @@ function Set-TargetResource
     .PARAMETER ForwardDelegations
         Specifies whether queries to delegated sub-zones are forwarded.
 
-    .PARAMETER IsSlave
-        TRUE if the DNS server does not use recursion when name-resolution through
-        forwarders fails.
-
     .PARAMETER ListeningIPAddress
         Enumerates the list of IP addresses on which the DNS Server can receive
         queries.
@@ -337,9 +369,6 @@ function Set-TargetResource
     .PARAMETER LocalNetPriority
         Indicates whether the DNS Server gives priority to the local net address
         when returning A records.
-
-    .PARAMETER LogLevel
-        Indicates which policies are activated in the Event Viewer system log.
 
     .PARAMETER LooseWildcarding
         Indicates whether the DNS Server performs loose wildcarding.
@@ -411,10 +440,6 @@ function Test-TargetResource
 
         [Parameter()]
         [bool]
-        $DisjointNets,
-
-        [Parameter()]
-        [bool]
         $EnableDirectoryPartitions,
 
         [Parameter()]
@@ -426,20 +451,12 @@ function Test-TargetResource
         $ForwardDelegations,
 
         [Parameter()]
-        [bool]
-        $IsSlave,
-
-        [Parameter()]
         [string[]]
         $ListeningIPAddress,
 
         [Parameter()]
         [bool]
         $LocalNetPriority,
-
-        [Parameter()]
-        [uint32]
-        $LogLevel,
 
         [Parameter()]
         [bool]
@@ -484,9 +501,7 @@ function Test-TargetResource
 
     $null = $PSBoundParameters.Remove('DnsServer')
 
-    $result = Test-DscDnsParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -TurnOffTypeChecking -Verbose:$VerbosePreference
+    $result = Test-DscDnsParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -Verbose:$VerbosePreference
 
     return $result
 }
-
-Export-ModuleMember -Function *-TargetResource
