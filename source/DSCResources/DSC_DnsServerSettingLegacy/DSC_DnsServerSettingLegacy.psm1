@@ -221,7 +221,13 @@ function Test-TargetResource
 
     $null = $PSBoundParameters.Remove('DnsServer')
 
-    $result = Test-DscDnsParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -Verbose:$VerbosePreference
+    $result = $true
+
+    # Returns an item for each property that is not in desired state.
+    if (Compare-DscParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -Verbose:$VerbosePreference)
+    {
+        $result = $false
+    }
 
     return $result
 }
