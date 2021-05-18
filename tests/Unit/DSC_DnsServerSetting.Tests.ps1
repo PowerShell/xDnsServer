@@ -31,193 +31,642 @@ Invoke-TestSetup
 try
 {
     InModuleScope $script:dscResourceName {
-        #region Pester Test Initialization
-        $testParameters = @{
-            DnsServer                 = 'dns1.company.local'
-            AddressAnswerLimit        = 5
-            AllowUpdate               = 2
-            AutoCacheUpdate           = $true
-            AutoConfigFileZones       = 4
-            BindSecondaries           = $true
-            BootMethod                = 1
-            DisableAutoReverseZone    = $true
-            DisjointNets              = $true
-            EnableDirectoryPartitions = $false
-            EnableDnsSec              = 0
-            ForwardDelegations        = 1
-            IsSlave                   = $true
-            ListeningIPAddress        = '192.168.0.10', '192.168.0.11'
-            LocalNetPriority          = $false
-            LogLevel                  = 256
-            LooseWildcarding          = $true
-            NameCheckFlag             = 1
-            RoundRobin                = $false
-            RpcProtocol               = 1
-            SendPort                  = 100
-            StrictFileParsing         = $true
-            UpdateOptions             = 700
-            WriteAuthorityNS          = $true
-            XfrConnectTimeout         = 15
-        }
+        Describe 'DSC_DnsServerSetting\Get-TargetResource' -Tag 'Get' {
+            BeforeAll {
+                Mock -CommandName Assert-Module
+                Mock -CommandName Get-DnsServerSetting -MockWith {
+                    return @{
+                        DnsServer                        = 'dns1.company.local'
+                        LocalNetPriority                 = $false
+                        RoundRobin                       = $false
+                        RpcProtocol                      = 1
+                        NameCheckFlag                    = 2
+                        AutoConfigFileZones              = 1
+                        AddressAnswerLimit               = 0
+                        UpdateOptions                    = 783
+                        DisableAutoReverseZone           = $false
+                        StrictFileParsing                = $false
+                        EnableDirectoryPartitions        = $false
+                        XfrConnectTimeout                = 30
+                        BootMethod                       = 3
+                        AllowUpdate                      = $true
+                        LooseWildcarding                 = $false
+                        BindSecondaries                  = $false
+                        AutoCacheUpdate                  = $false
+                        EnableDnsSec                     = $true
+                        SendPort                         = 0
+                        WriteAuthorityNS                 = $false
+                        ListeningIPAddress               = @('192.168.1.10', '192.168.2.10')
+                        ForwardDelegations               = $false
 
-        $mockGetCimInstance = @{
-            DnsServer                 = 'dns1.company.local'
-            Caption                   = $null
-            Description               = $null
-            InstallDate               = $null
-            Status                    = 'OK'
-            CreationClassName         = $null
-            Started                   = $true
-            StartMode                 = 'Automatic'
-            SystemCreationClassName   = $null
-            SystemName                = $null
-            AddressAnswerLimit        = 0
-            AllowUpdate               = 1
-            AutoCacheUpdate           = $false
-            AutoConfigFileZones       = 1
-            BindSecondaries           = $false
-            BootMethod                = 3
-            DisableAutoReverseZone    = $false
-            DisjointNets              = $false
-            DsAvailable               = $true
-            EnableDirectoryPartitions = $true
-            EnableDnsSec              = 1
-            ForwardDelegations        = 0
-            IsSlave                   = $false
-            ListeningIPAddress        = $null
-            LocalNetPriority          = $true
-            LogLevel                  = 0
-            LooseWildcarding          = $false
-            NameCheckFlag             = 2
-            RoundRobin                = $true
-            RpcProtocol               = 5
-            SendPort                  = 0
-            ServerAddresses           = 'fe80::7da3:a014:6581:2cdc', '10.0.0.4'
-            StrictFileParsing         = $false
-            UpdateOptions             = 783
-            Version                   = 629146374
-            WriteAuthorityNS          = $false
-            XfrConnectTimeout         = 30
-            PSComputerName            = $null
-        }
-
-        $array1 = 1, 2, 3
-        $array2 = 3, 2, 1
-        $array3 = 1, 2, 3, 4
-
-        $mockReadOnlyProperties = @{
-            DsAvailable = $true
-        }
-        #endregion Pester Test Initialization
-
-        #region Example state 1
-        Describe 'DSC_DnsServerSetting\Get-TargetResource' {
-            Mock -CommandName Assert-Module
-
-            Context 'The system is not in the desired state' {
-                It "Get method returns 'something'" {
-                    Mock Get-CimInstance -MockWith { $mockGetCimInstance }
-                    $getResult = Get-TargetResource -DnsServer 'dns1.company.local' -Verbose
-
-                    foreach ($key in $getResult.Keys)
-                    {
-                        if ($null -ne $getResult[$key] -and $key -ne 'DnsServer')
-                        {
-                            $getResult[$key] | Should be $mockGetCimInstance[$key]
-                        }
-
-                        if ($key -eq 'DsAvailable')
-                        {
-                            $getResult[$key] | Should Be $mockReadOnlyProperties[$key]
-                        }
-                    }
-                }
-
-                It 'Get throws when CimClass is not found' {
-                    $mockThrow = @{
-                        Exception = @{
-                            Message = 'Invalid Namespace'
-                        }
-                    }
-
-                    Mock Get-CimInstance -MockWith { throw $mockThrow }
-
-                    { Get-TargetResource -DnsServer 'dns1.company.local' -Verbose } | Should -Throw
-                }
-            }
-
-            Context 'Error handling' {
-                It 'Test throws when CimClass is not found' {
-                    $mockThrow = @{
-                        Exception = @{
-                            Message = 'Invalid Namespace'
-                        }
-                    }
-
-                    Mock Get-CimInstance -MockWith { throw $mockThrow }
-
-                    { Get-TargetResource -DnsServer 'dns1.company.local' -Verbose } | Should -Throw
-                }
-            }
-        }
-
-        Describe 'DSC_DnsServerSetting\Test-TargetResource' {
-            Mock -CommandName Assert-Module
-
-            Context 'The system is not in the desired state' {
-                $falseParameters = @{
-                    DnsServer = 'dns1.company.local'
-                }
-
-                foreach ($key in $testParameters.Keys)
-                {
-                    if ($key -ne 'DnsServer')
-                    {
-                        $falseTestParameters = $falseParameters.Clone()
-                        $falseTestParameters.Add($key, $testParameters[$key])
-
-                        It "Test method returns false when testing $key" {
-                            Mock Get-TargetResource -MockWith { $mockGetCimInstance }
-                            Test-TargetResource @falseTestParameters -Verbose | Should -BeFalse
-                        }
+                        # Read-only properties
+                        DsAvailable                      = $true
+                        MajorVersion                     = 10
+                        MinorVersion                     = 0
+                        BuildNumber                      = 14393
+                        IsReadOnlyDC                     = $false
+                        AllIPAddress                     = @('fe80::e82e:70b7:f1d4:f695', '192.168.1.10', '192.168.2.10')
+                        ForestDirectoryPartitionBaseName = 'ForestDnsZones'
+                        DomainDirectoryPartitionBaseName = 'DomainDnsZones'
+                        MaximumUdpPacketSize             = 4000
                     }
                 }
             }
 
-            Context 'The system is in the desired state' {
-                Mock Get-TargetResource -MockWith { $mockGetCimInstance }
+            Context 'When the system is in the desired state' {
+                It "Should return the correct values for each property" {
+                    $getTargetResourceResult = Get-TargetResource -DnsServer 'dns1.company.local'
 
-                $trueParameters = @{
-                    DnsServer = 'dns1.company.local'
-                }
+                    $getTargetResourceResult.LocalNetPriority | Should -BeFalse
+                    $getTargetResourceResult.RoundRobin | Should -BeFalse
+                    $getTargetResourceResult.RpcProtocol | Should -Be 1
 
-                foreach ($key in $testParameters.Keys)
-                {
-                    if ($key -ne 'DnsServer')
-                    {
-                        $trueTestParameters = $trueParameters.Clone()
-                        $trueTestParameters.Add($key, $mockGetCimInstance[$key])
+                    # Read-only properties
+                    $getTargetResourceResult.DsAvailable | Should -BeTrue
+                    $getTargetResourceResult.MajorVersion | Should -Be 10
+                    $getTargetResourceResult.MinorVersion | Should -Be 0
+                    $getTargetResourceResult.BuildNumber | Should -Be 14393
+                    $getTargetResourceResult.IsReadOnlyDC | Should -BeFalse
+                    $getTargetResourceResult.ForestDirectoryPartitionBaseName | Should -Be 'ForestDnsZones'
+                    $getTargetResourceResult.DomainDirectoryPartitionBaseName | Should -Be 'DomainDnsZones'
+                    $getTargetResourceResult.MaximumUdpPacketSize | Should -Be 4000
+                    $getTargetResourceResult.NameCheckFlag | Should -Be 2
+                    $getTargetResourceResult.AutoConfigFileZones | Should -Be 1
+                    $getTargetResourceResult.AddressAnswerLimit | Should -Be 0
+                    $getTargetResourceResult.UpdateOptions | Should -Be 783
+                    $getTargetResourceResult.DisableAutoReverseZone | Should -BeFalse
+                    $getTargetResourceResult.StrictFileParsing | Should -BeFalse
+                    $getTargetResourceResult.EnableDirectoryPartitions | Should -BeFalse
+                    $getTargetResourceResult.XfrConnectTimeout | Should -Be 30
+                    $getTargetResourceResult.BootMethod | Should -Be 3
+                    $getTargetResourceResult.AllowUpdate | Should -BeTrue
+                    $getTargetResourceResult.LooseWildcarding | Should -BeFalse
+                    $getTargetResourceResult.BindSecondaries | Should -BeFalse
+                    $getTargetResourceResult.AutoCacheUpdate | Should -BeFalse
+                    $getTargetResourceResult.EnableDnsSec | Should -BeTrue
+                    $getTargetResourceResult.SendPort | Should -Be 0
+                    $getTargetResourceResult.WriteAuthorityNS | Should -BeFalse
+                    $getTargetResourceResult.ForwardDelegations | Should -BeFalse
 
-                        It "Test method returns true when testing $key" {
-                            Test-TargetResource @trueTestParameters -Verbose | Should -BeTrue
-                        }
-                    }
+                    $getTargetResourceResult.ListeningIPAddress | Should -HaveCount 2
+                    $getTargetResourceResult.ListeningIPAddress | Should -Contain '192.168.1.10'
+                    $getTargetResourceResult.ListeningIPAddress | Should -Contain '192.168.2.10'
+
+                    $getTargetResourceResult.AllIPAddress | Should -HaveCount 3
+                    $getTargetResourceResult.AllIPAddress | Should -Contain 'fe80::e82e:70b7:f1d4:f695'
+                    $getTargetResourceResult.AllIPAddress | Should -Contain '192.168.1.10'
+                    $getTargetResourceResult.AllIPAddress | Should -Contain '192.168.2.10'
                 }
             }
         }
 
-        Describe 'DSC_DnsServerSetting\Test-TargetResource' {
-            Mock -CommandName Assert-Module
+        Describe 'DSC_DnsServerSetting\Test-TargetResource' -Tag 'Test' {
+            BeforeAll {
+                Mock -CommandName Assert-Module
+            }
 
-            It 'Set method calls Set-CimInstance' {
-                $mockCimClass = Import-Clixml -Path $PSScriptRoot\MockObjects\DnsServerClass.xml
+            Context 'When the system is not in the desired state' {
+                BeforeAll {
+                    Mock -CommandName Get-TargetResource -MockWith {
+                        return @{
+                            DnsServer                 = 'dns1.company.local'
+                            LocalNetPriority          = $true
+                            RoundRobin                = $true
+                            RpcProtocol               = [System.UInt32] 0
+                            NameCheckFlag             = [System.UInt32] 2
+                            AutoConfigFileZones       = [System.UInt32] 1
+                            AddressAnswerLimit        = [System.UInt32] 0
+                            UpdateOptions             = [System.UInt32] 783
+                            DisableAutoReverseZone    = $false
+                            StrictFileParsing         = $false
+                            EnableDirectoryPartitions = $false
+                            XfrConnectTimeout         = [System.UInt32] 30
+                            BootMethod                = [System.UInt32] 3
+                            AllowUpdate               = $true
+                            LooseWildcarding          = $false
+                            BindSecondaries           = $false
+                            AutoCacheUpdate           = $false
+                            EnableDnsSec              = $true
+                            SendPort                  = [System.UInt32] 0
+                            WriteAuthorityNS          = $false
+                            ListeningIPAddress        = [System.String[]] @('192.168.1.10', '192.168.2.10')
+                            ForwardDelegations        = $false
+                        }
+                    }
 
-                Mock Get-CimInstance -MockWith { $mockCimClass }
-                Mock Set-CimInstance
+                    $testCases = @(
+                        @{
+                            PropertyName  = 'LocalNetPriority'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'RoundRobin'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'RpcProtocol'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'NameCheckFlag'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'AutoConfigFileZones'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'AddressAnswerLimit'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'UpdateOptions'
+                            PropertyValue = [System.UInt32] 784
+                        }
+                        @{
+                            PropertyName  = 'DisableAutoReverseZone'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'StrictFileParsing'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'EnableDirectoryPartitions'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'XfrConnectTimeout'
+                            PropertyValue = [System.UInt32] 40
+                        }
+                        @{
+                            PropertyName  = 'BootMethod'
+                            PropertyValue = [System.UInt32] 2
+                        }
+                        @{
+                            PropertyName  = 'AllowUpdate'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'LooseWildcarding'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'BindSecondaries'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'AutoCacheUpdate'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'EnableDnsSec'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'SendPort'
+                            PropertyValue = [System.UInt32] 100
+                        }
+                        @{
+                            PropertyName  = 'WriteAuthorityNS'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'ForwardDelegations'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'ListeningIPAddress'
+                            PropertyValue = [System.String[]] @('fe80::e82e:70b7:f1d4:f695')
+                        }
+                    )
+                }
 
-                Set-TargetResource @testParameters -Verbose
+                It 'Should return $false for property <PropertyName>' -TestCases $testCases {
+                    param
+                    (
+                        $PropertyName,
+                        $PropertyValue
+                    )
 
-                Assert-MockCalled Set-CimInstance -Exactly 1
+                    $testTargetResourceParameters = @{
+                        DnsServer     = 'dns1.company.local'
+                        $PropertyName = $PropertyValue
+                    }
+
+                    Test-TargetResource @testTargetResourceParameters | Should -BeFalse
+                }
+            }
+
+            Context 'When the system is in the desired state' {
+                BeforeAll {
+                    Mock -CommandName Get-TargetResource -MockWith {
+                        return @{
+                            DnsServer                 = 'dns1.company.local'
+                            LocalNetPriority          = $true
+                            RoundRobin                = $true
+                            RpcProtocol               = [System.UInt32] 0
+                            NameCheckFlag             = [System.UInt32] 2
+                            AutoConfigFileZones       = [System.UInt32] 1
+                            AddressAnswerLimit        = [System.UInt32] 0
+                            UpdateOptions             = [System.UInt32] 783
+                            DisableAutoReverseZone    = $false
+                            StrictFileParsing         = $false
+                            EnableDirectoryPartitions = $false
+                            XfrConnectTimeout         = [System.UInt32] 30
+                            BootMethod                = [System.UInt32] 3
+                            AllowUpdate               = $true
+                            LooseWildcarding          = $false
+                            BindSecondaries           = $false
+                            AutoCacheUpdate           = $false
+                            EnableDnsSec              = $true
+                            SendPort                  = [System.UInt32] 0
+                            WriteAuthorityNS          = $false
+                            ListeningIPAddress        = [System.String[]] @('192.168.1.10', '192.168.2.10')
+                            ForwardDelegations        = $false
+                        }
+                    }
+
+                    $testCases = @(
+                        @{
+                            PropertyName  = 'LocalNetPriority'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'RoundRobin'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'RpcProtocol'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'NameCheckFlag'
+                            PropertyValue = [System.UInt32] 2
+                        }
+                        @{
+                            PropertyName  = 'AutoConfigFileZones'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'AddressAnswerLimit'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'UpdateOptions'
+                            PropertyValue = [System.UInt32] 783
+                        }
+                        @{
+                            PropertyName  = 'DisableAutoReverseZone'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'StrictFileParsing'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'EnableDirectoryPartitions'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'XfrConnectTimeout'
+                            PropertyValue = [System.UInt32] 30
+                        }
+                        @{
+                            PropertyName  = 'BootMethod'
+                            PropertyValue = [System.UInt32] 3
+                        }
+                        @{
+                            PropertyName  = 'AllowUpdate'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'LooseWildcarding'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'BindSecondaries'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'AutoCacheUpdate'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'EnableDnsSec'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'SendPort'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'WriteAuthorityNS'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'ForwardDelegations'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'ListeningIPAddress'
+                            PropertyValue = [System.String[]] @('192.168.1.10', '192.168.2.10')
+                        }
+                    )
+                }
+
+                It 'Should return $true for property <PropertyName>' -TestCases $testCases {
+                    param
+                    (
+                        $PropertyName,
+                        $PropertyValue
+                    )
+
+                    $testTargetResourceParameters = @{
+                        DnsServer     = 'dns1.company.local'
+                        $PropertyName = $PropertyValue
+                    }
+
+                    Test-TargetResource @testTargetResourceParameters | Should -BeTrue
+                }
+            }
+        }
+
+        Describe 'DSC_DnsServerSetting\Set-TargetResource' -Tag 'Set' {
+            BeforeAll {
+                Mock -CommandName Assert-Module
+                Mock -CommandName Set-DnsServerSetting
+            }
+
+            Context 'When the system is not in the desired state' {
+                BeforeAll {
+                    Mock -CommandName Get-DnsServerSetting -MockWith {
+                        return New-CimInstance -ClassName 'DnsServerSetting' -Namespace 'root/Microsoft/Windows/DNS' -ClientOnly -Property @{
+                            DnsServer                 = 'dns1.company.local'
+                            LocalNetPriority          = $true
+                            RoundRobin                = $true
+                            RpcProtocol               = [System.UInt32] 0
+                            NameCheckFlag             = [System.UInt32] 2
+                            AutoConfigFileZones       = [System.UInt32] 1
+                            AddressAnswerLimit        = [System.UInt32] 0
+                            UpdateOptions             = [System.UInt32] 783
+                            DisableAutoReverseZone    = $false
+                            StrictFileParsing         = $false
+                            EnableDirectoryPartitions = $false
+                            XfrConnectTimeout         = [System.UInt32] 30
+                            BootMethod                = [System.UInt32] 3
+                            AllowUpdate               = $true
+                            LooseWildcarding          = $false
+                            BindSecondaries           = $false
+                            AutoCacheUpdate           = $false
+                            EnableDnsSec              = $true
+                            SendPort                  = [System.UInt32] 0
+                            WriteAuthorityNS          = $false
+                            ListeningIPAddress        = [System.String[]] @('192.168.1.10', '192.168.2.10')
+                            ForwardDelegations        = $false
+                        }
+                    }
+
+                    $testCases = @(
+                        @{
+                            PropertyName  = 'LocalNetPriority'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'RoundRobin'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'RpcProtocol'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'NameCheckFlag'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'AutoConfigFileZones'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'AddressAnswerLimit'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'UpdateOptions'
+                            PropertyValue = [System.UInt32] 784
+                        }
+                        @{
+                            PropertyName  = 'DisableAutoReverseZone'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'StrictFileParsing'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'EnableDirectoryPartitions'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'XfrConnectTimeout'
+                            PropertyValue = [System.UInt32] 40
+                        }
+                        @{
+                            PropertyName  = 'BootMethod'
+                            PropertyValue = [System.UInt32] 2
+                        }
+                        @{
+                            PropertyName  = 'AllowUpdate'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'LooseWildcarding'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'BindSecondaries'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'AutoCacheUpdate'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'EnableDnsSec'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'SendPort'
+                            PropertyValue = [System.UInt32] 100
+                        }
+                        @{
+                            PropertyName  = 'WriteAuthorityNS'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'ForwardDelegations'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'ListeningIPAddress'
+                            PropertyValue = [System.String[]] @('fe80::e82e:70b7:f1d4:f695')
+                        }
+                    )
+                }
+
+                It 'Should not throw and call the correct mock to set the property <PropertyName>' -TestCases $testCases {
+                    param
+                    (
+                        $PropertyName,
+                        $PropertyValue
+                    )
+
+                    $setTargetResourceParameters = @{
+                        DnsServer     = 'dns1.company.local'
+                        $PropertyName = $PropertyValue
+                    }
+
+                    { Set-TargetResource @setTargetResourceParameters } | Should -Not -Throw
+
+                    Assert-MockCalled -CommandName Set-DnsServerSetting -Exactly -Times 1 -Scope It
+                }
+            }
+
+            Context 'When the system is in the desired state' {
+                BeforeAll {
+                    Mock -CommandName Get-DnsServerSetting -MockWith {
+                        return New-CimInstance -ClassName 'DnsServerSetting' -Namespace 'root/Microsoft/Windows/DNS' -ClientOnly -Property @{
+                            DnsServer                 = 'dns1.company.local'
+                            LocalNetPriority          = $true
+                            RoundRobin                = $true
+                            RpcProtocol               = [System.UInt32] 0
+                            NameCheckFlag             = [System.UInt32] 2
+                            AutoConfigFileZones       = [System.UInt32] 1
+                            AddressAnswerLimit        = [System.UInt32] 0
+                            UpdateOptions             = [System.UInt32] 783
+                            DisableAutoReverseZone    = $false
+                            StrictFileParsing         = $false
+                            EnableDirectoryPartitions = $false
+                            XfrConnectTimeout         = [System.UInt32] 30
+                            BootMethod                = [System.UInt32] 3
+                            AllowUpdate               = $true
+                            LooseWildcarding          = $false
+                            BindSecondaries           = $false
+                            AutoCacheUpdate           = $false
+                            EnableDnsSec              = $true
+                            SendPort                  = [System.UInt32] 0
+                            WriteAuthorityNS          = $false
+                            ListeningIPAddress        = [System.String[]] @('192.168.1.10', '192.168.2.10')
+                            ForwardDelegations        = $false
+                        }
+                    }
+
+
+                    $testCases = @(
+                        @{
+                            PropertyName  = 'LocalNetPriority'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'RoundRobin'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'RpcProtocol'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'NameCheckFlag'
+                            PropertyValue = [System.UInt32] 2
+                        }
+                        @{
+                            PropertyName  = 'AutoConfigFileZones'
+                            PropertyValue = [System.UInt32] 1
+                        }
+                        @{
+                            PropertyName  = 'AddressAnswerLimit'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'UpdateOptions'
+                            PropertyValue = [System.UInt32] 783
+                        }
+                        @{
+                            PropertyName  = 'DisableAutoReverseZone'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'StrictFileParsing'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'EnableDirectoryPartitions'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'XfrConnectTimeout'
+                            PropertyValue = [System.UInt32] 30
+                        }
+                        @{
+                            PropertyName  = 'BootMethod'
+                            PropertyValue = [System.UInt32] 3
+                        }
+                        @{
+                            PropertyName  = 'AllowUpdate'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'LooseWildcarding'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'BindSecondaries'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'AutoCacheUpdate'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'EnableDnsSec'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'SendPort'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                        @{
+                            PropertyName  = 'WriteAuthorityNS'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'ForwardDelegations'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'ListeningIPAddress'
+                            PropertyValue = [System.String[]] @('192.168.1.10', '192.168.2.10')
+                        }
+                    )
+                }
+
+                It 'Should not throw and should not set the property <PropertyName>' -TestCases $testCases {
+                    param
+                    (
+                        $PropertyName,
+                        $PropertyValue
+                    )
+
+                    $setTargetResourceParameters = @{
+                        DnsServer     = 'dns1.company.local'
+                        $PropertyName = $PropertyValue
+                    }
+
+                    { Set-TargetResource @setTargetResourceParameters } | Should -Not -Throw
+
+                    Assert-MockCalled -CommandName Set-DnsServerSetting -Exactly -Times 0 -Scope It
+                }
             }
         }
     }

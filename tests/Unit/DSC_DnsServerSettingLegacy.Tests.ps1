@@ -33,16 +33,14 @@ try
     InModuleScope $script:dscResourceName {
         Describe 'DSC_DnsServerSettingLegacy\Get-TargetResource' -Tag 'Get' {
             BeforeAll {
-                $mockGetCimInstance = @{
-                    DnsServer            = 'dns1.company.local'
-                    DisjointNets         = $false
-                    NoForwarderRecursion = $false
-                    LogLevel             = [System.UInt32] 0
-                }
-
                 Mock -CommandName Assert-Module
                 Mock -CommandName Get-CimClassMicrosoftDnsServer -MockWith {
-                    return $mockGetCimInstance
+                    return @{
+                        DnsServer            = 'dns1.company.local'
+                        DisjointNets         = $false
+                        NoForwarderRecursion = $false
+                        LogLevel             = [System.UInt32] 0
+                    }
                 }
             }
 
@@ -97,7 +95,7 @@ try
                     )
 
                     $testTargetResourceParameters = @{
-                        DnsServer = 'dns1.company.local'
+                        DnsServer     = 'dns1.company.local'
                         $PropertyName = $PropertyValue
                     }
 
@@ -140,7 +138,7 @@ try
                     )
 
                     $testTargetResourceParameters = @{
-                        DnsServer = 'dns1.company.local'
+                        DnsServer     = 'dns1.company.local'
                         $PropertyName = $PropertyValue
                     }
 
@@ -149,20 +147,130 @@ try
             }
         }
 
-        # TODO: continue here
+        Describe 'DSC_DnsServerSettingLegacy\Set-TargetResource' -Tag 'Set' {
+            BeforeAll {
+                Mock -CommandName Assert-Module
+                Mock -CommandName Set-CimInstance
+                Mock -CommandName Get-CimClassMicrosoftDnsServer -MockWith {
+                    return New-CimInstance -ClassName 'MicrosoftDNS_Server' -Namespace 'root\MicrosoftDNS' -ClientOnly -Property @{
+                        DisjointNets         = $false
+                        NoForwarderRecursion = $false
+                        LogLevel             = [System.UInt32] 0
+                    }
+                }
+            }
 
-        Describe 'DSC_DnsServerSettingLegacy\Set-TargetResource' {
-            Mock -CommandName Assert-Module
+            Context 'When the system is not in the desired state' {
+                BeforeAll {
+                    Mock -CommandName Get-TargetResource -MockWith {
+                        return @{
+                            DnsServer            = 'dns1.company.local'
+                            DisjointNets         = $true
+                            NoForwarderRecursion = $true
+                            LogLevel             = [System.UInt32] 5
+                        }
+                    }
 
-            It 'Set method calls Set-CimInstance' {
-                $mockCimClass = Import-Clixml -Path $PSScriptRoot\MockObjects\DnsServerClass.xml
+                    $testCases = @(
+                        @{
+                            PropertyName  = 'DisjointNets'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'NoForwarderRecursion'
+                            PropertyValue = $false
+                        }
+                        @{
+                            PropertyName  = 'LogLevel'
+                            PropertyValue = [System.UInt32] 0
+                        }
+                    )
+                }
 
-                Mock Get-CimInstance -MockWith { $mockCimClass }
-                Mock Set-CimInstance
+                It 'Should not throw and call the correct mock to set the property <PropertyName>' -TestCases $testCases {
+                    param
+                    (
+                        $PropertyName,
+                        $PropertyValue
+                    )
 
-                Set-TargetResource @testParameters -Verbose
+                    $setTargetResourceParameters = @{
+                        DnsServer     = 'dns1.company.local'
+                        $PropertyName = $PropertyValue
+                    }
 
-                Assert-MockCalled Set-CimInstance -Exactly 1
+                    { Set-TargetResource @setTargetResourceParameters } | Should -Not -Throw
+
+                    Assert-MockCalled -CommandName Set-CimInstance -Exactly -Times 1 -Scope It
+                }
+            }
+
+            Context 'When the system is in the desired state' {
+                BeforeAll {
+                    Mock -CommandName Get-TargetResource -MockWith {
+                        return @{
+                            DnsServer            = 'dns1.company.local'
+                            DisjointNets         = $true
+                            NoForwarderRecursion = $true
+                            LogLevel             = [System.UInt32] 5
+                        }
+                    }
+
+                    $testCases = @(
+                        @{
+                            PropertyName  = 'DisjointNets'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'NoForwarderRecursion'
+                            PropertyValue = $true
+                        }
+                        @{
+                            PropertyName  = 'LogLevel'
+                            PropertyValue = [System.UInt32] 5
+                        }
+                    )
+                }
+
+                It 'Should not throw and should not set the property <PropertyName>' -TestCases $testCases {
+                    param
+                    (
+                        $PropertyName,
+                        $PropertyValue
+                    )
+
+                    $setTargetResourceParameters = @{
+                        DnsServer     = 'dns1.company.local'
+                        $PropertyName = $PropertyValue
+                    }
+
+                    { Set-TargetResource @setTargetResourceParameters } | Should -Not -Throw
+
+                    Assert-MockCalled -CommandName Set-CimInstance -Exactly -Times 0 -Scope It
+                }
+            }
+        }
+
+        Describe 'DSC_DnsServerSettingLegacy\Get-CimClassMicrosoftDnsServer' -Tag 'Helper' {
+            BeforeAll {
+                Mock -CommandName Get-CimInstance -MockWith {
+                    return New-CimInstance -ClassName 'MicrosoftDNS_Server' -Namespace 'root\MicrosoftDNS' -ClientOnly -Property @{
+                        DisjointNets         = $false
+                        NoForwarderRecursion = $false
+                        LogLevel             = [System.UInt32] 0
+                    }
+                }
+            }
+
+            Context 'When the system is not in the desired state' {
+                It 'Should return the correct object' {
+                    $getCimClassMicrosoftDnsServerResult = Get-CimClassMicrosoftDnsServer -DnsServer 'dns1.company.local'
+
+                    $getCimClassMicrosoftDnsServerResult | Should -BeOfType [Microsoft.Management.Infrastructure.CimInstance]
+                    $getCimClassMicrosoftDnsServerResult.DisjointNets | Should -BeFalse
+                    $getCimClassMicrosoftDnsServerResult.NoForwarderRecursion | Should -BeFalse
+                    $getCimClassMicrosoftDnsServerResult.LogLevel | Should -Be 0
+                }
             }
         }
     }

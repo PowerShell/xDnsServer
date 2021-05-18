@@ -115,64 +115,57 @@ function Set-TargetResource
 
     $dnsServerInstance = Get-CimClassMicrosoftDnsServer -DnsServer $DnsServer
 
-    try
+    $propertiesInDesiredState = @()
+
+    foreach ($property in $dnsProperties.keys)
     {
-        $propertiesInDesiredState = @()
-
-        foreach ($property in $dnsProperties.keys)
+        if ($dnsProperties.$property -ne $getTargetResourceResult.$property)
         {
-            if ($dnsProperties.$property -ne $getTargetResourceResult.$property)
-            {
-                # Property not in desired state.
+            # Property not in desired state.
 
-                Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
-            }
-            else
-            {
-                # Property in desired state.
-
-                Write-Verbose -Message ($script:localizedData.PropertyInDesiredState -f $property)
-
-                $propertiesInDesiredState += $property
-            }
-        }
-
-        # Remove passed parameters that are in desired state.
-        $propertiesInDesiredState | ForEach-Object -Process {
-            $dnsProperties.Remove($_)
-        }
-
-        # Handle renaming properties to what the class expects.
-        if ($dnsProperties.ContainsKey('NoForwarderRecursion'))
-        {
-            $dnsProperties.IsSlave = $dnsProperties.NoForwarderRecursion
-
-            $dnsProperties.Remove('NoForwarderRecursion')
-        }
-
-        if ($dnsProperties.Keys.Count -eq 0)
-        {
-            Write-Verbose -Message $script:localizedData.LegacySettingsInDesiredState
+            Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
         }
         else
         {
-            $setCimInstanceParameters = @{
-                InputObject = $dnsServerInstance
-                Property    = $dnsProperties
-                ErrorAction = 'Stop'
-            }
+            # Property in desired state.
 
-            if ($DnsServer -ne 'localhost')
-            {
-                $setCimInstanceParameters['ComputerName'] = $DnsServer
-            }
+            Write-Verbose -Message ($script:localizedData.PropertyInDesiredState -f $property)
 
-            Set-CimInstance @setCimInstanceParameters
+            $propertiesInDesiredState += $property
         }
     }
-    catch
+
+    # Remove passed parameters that are in desired state.
+    $propertiesInDesiredState | ForEach-Object -Process {
+        $dnsProperties.Remove($_)
+    }
+
+    # Handle renaming properties to what the class expects.
+    if ($dnsProperties.ContainsKey('NoForwarderRecursion'))
     {
-        throw $_
+        $dnsProperties.IsSlave = $dnsProperties.NoForwarderRecursion
+
+        $dnsProperties.Remove('NoForwarderRecursion')
+    }
+
+    if ($dnsProperties.Keys.Count -eq 0)
+    {
+        Write-Verbose -Message $script:localizedData.LegacySettingsInDesiredState
+    }
+    else
+    {
+        $setCimInstanceParameters = @{
+            InputObject = $dnsServerInstance
+            Property    = $dnsProperties
+            ErrorAction = 'Stop'
+        }
+
+        if ($DnsServer -ne 'localhost')
+        {
+            $setCimInstanceParameters['ComputerName'] = $DnsServer
+        }
+
+        Set-CimInstance @setCimInstanceParameters
     }
 }
 

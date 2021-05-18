@@ -106,6 +106,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     to `DisableAutoReverseZone`.
   - BREAKING CHANGE: The property `ListenAddresses` have been renamed
     to `ListeningIPAddress`.
+  - BREAKING CHANGE: The property `AllowUpdate` was changed to a boolean
+    value (`$true` or `$false`) since that is what the cmdlet `Set-DnsServerSetting`
+    is expecting (related to [issue #101](https://github.com/dsccommunity/xDnsServer/issues/101)).
+  - BREAKING CHANGE: The property `EnableDnsSec` was changed to a boolean
+    value (`$true` or `$false`) since that is what the cmdlet `Set-DnsServerSetting`
+    is expecting.
+  - BREAKING CHANGE: The property `ForwardDelegations` was changed to a boolean
+    value (`$true` or `$false`) since that is what the cmdlet `Set-DnsServerSetting`
+    is expecting.
 
 ### Fixed
 

@@ -35,6 +35,10 @@ $script:classProperties = @(
     'MinorVersion'
     'BuildNumber'
     'IsReadOnlyDC'
+    'AllIPAddress'
+    'ForestDirectoryPartitionBaseName'
+    'DomainDirectoryPartitionBaseName'
+    'MaximumUdpPacketSize'
 )
 
 <#
@@ -176,87 +180,87 @@ function Set-TargetResource
         $DnsServer,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $AddressAnswerLimit,
 
         [Parameter()]
-        [uint32]
+        [System.Boolean]
         $AllowUpdate,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $AutoCacheUpdate,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $AutoConfigFileZones,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $BindSecondaries,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $BootMethod,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $DisableAutoReverseZone,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $EnableDirectoryPartitions,
 
         [Parameter()]
-        [uint32]
+        [System.Boolean]
         $EnableDnsSec,
 
         [Parameter()]
-        [uint32]
+        [System.Boolean]
         $ForwardDelegations,
 
         [Parameter()]
-        [string[]]
+        [System.String[]]
         $ListeningIPAddress,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $LocalNetPriority,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $LooseWildcarding,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $NameCheckFlag,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $RoundRobin,
 
         [Parameter()]
-        [int16]
+        [System.UInt32]
         $RpcProtocol,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $SendPort,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $StrictFileParsing,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $UpdateOptions,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $WriteAuthorityNS,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $XfrConnectTimeout
     )
 
@@ -272,19 +276,36 @@ function Set-TargetResource
 
     foreach ($property in $dnsProperties.keys)
     {
-        if ($dnsProperties.$property -ne $getDnServerSettingResult.$property)
+        if ($property -eq 'ListeningIPAddress')
         {
-            # Property not in desired state.
+            # Compare array
 
-            Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
+            $compareObjectParameters = @{
+                ReferenceObject = $dnsProperties.$property
+                DifferenceObject = $getDnServerSettingResult.$property
+            }
+
+            $isPropertyInDesiredState = -not (Compare-Object @compareObjectParameters)
         }
         else
+        {
+            $isPropertyInDesiredState = $dnsProperties.$property -eq $getDnServerSettingResult.$property
+        }
+
+        if ($isPropertyInDesiredState)
         {
             # Property in desired state.
 
             Write-Verbose -Message ($script:localizedData.PropertyInDesiredState -f $property)
 
             $propertiesInDesiredState += $property
+
+        }
+        else
+        {
+            # Property not in desired state.
+
+            Write-Verbose -Message ($script:localizedData.SetDnsServerSetting -f $property, $dnsProperties[$property])
         }
     }
 
@@ -403,7 +424,7 @@ function Set-TargetResource
 function Test-TargetResource
 {
     [CmdletBinding()]
-    [OutputType([bool])]
+    [OutputType([System.Boolean])]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -411,87 +432,87 @@ function Test-TargetResource
         $DnsServer,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $AddressAnswerLimit,
 
         [Parameter()]
-        [uint32]
+        [System.Boolean]
         $AllowUpdate,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $AutoCacheUpdate,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $AutoConfigFileZones,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $BindSecondaries,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $BootMethod,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $DisableAutoReverseZone,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $EnableDirectoryPartitions,
 
         [Parameter()]
-        [uint32]
+        [System.Boolean]
         $EnableDnsSec,
 
         [Parameter()]
-        [uint32]
+        [System.Boolean]
         $ForwardDelegations,
 
         [Parameter()]
-        [string[]]
+        [System.String[]]
         $ListeningIPAddress,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $LocalNetPriority,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $LooseWildcarding,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $NameCheckFlag,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $RoundRobin,
 
         [Parameter()]
-        [int16]
+        [System.UInt32]
         $RpcProtocol,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $SendPort,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $StrictFileParsing,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $UpdateOptions,
 
         [Parameter()]
-        [bool]
+        [System.Boolean]
         $WriteAuthorityNS,
 
         [Parameter()]
-        [uint32]
+        [System.UInt32]
         $XfrConnectTimeout
     )
 
@@ -501,7 +522,13 @@ function Test-TargetResource
 
     $null = $PSBoundParameters.Remove('DnsServer')
 
-    $result = Test-DscDnsParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -Verbose:$VerbosePreference
+    $result = $true
+
+    # Returns an item for each property that is not in desired state.
+    if (Compare-DscParameterState -CurrentValues $currentState -DesiredValues $PSBoundParameters -Verbose:$VerbosePreference)
+    {
+        $result = $false
+    }
 
     return $result
 }
