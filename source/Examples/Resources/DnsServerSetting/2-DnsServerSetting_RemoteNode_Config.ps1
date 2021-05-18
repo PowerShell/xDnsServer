@@ -50,12 +50,10 @@ Configuration DnsServerSetting_RemoteNode_Config
         {
             DnsServer          = 'dns1.company.local'
             ListeningIPAddress = '10.0.0.4'
-            IsSlave            = $true
             RoundRobin         = $true
             LocalNetPriority   = $true
             BindSecondaries    = $false
             StrictFileParsing  = $false
-            LogLevel           = 50393905
         }
     }
 }

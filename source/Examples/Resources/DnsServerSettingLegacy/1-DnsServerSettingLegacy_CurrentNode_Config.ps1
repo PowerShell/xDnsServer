@@ -2,7 +2,7 @@
 
 .VERSION 1.0.1
 
-.GUID 1d48864f-a258-4e2a-b67a-b5374c29520c
+.GUID a1a5300b-92c9-4443-8016-c305c6fbbfbb
 
 .AUTHOR DSC Community
 
@@ -25,7 +25,7 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Updated author, copyright notice, and URLs.
+First version.
 
 .PRIVATEDATA 2016-Datacenter,2016-Datacenter-Server-Core
 
@@ -36,24 +36,22 @@ Updated author, copyright notice, and URLs.
 
 <#
     .DESCRIPTION
-        This configuration will manage the DNS server settings on the current
+        This configuration will manage the DNS server legacy settings on the current
         node.
 #>
 
-Configuration DnsServerSetting_CurrentNode_Config
+Configuration DnsServerSettingLegacy_CurrentNode_Config
 {
     Import-DscResource -ModuleName 'DnsServerDsc'
 
     Node localhost
     {
-        DnsServerSetting 'DnsServerProperties'
+        DnsServerSettingLegacy 'DnsServerLegacyProperties'
         {
-            DnsServer           = 'localhost'
-            ListeningIPAddress    = '10.0.0.4'
-            RoundRobin         = $true
-            LocalNetPriority   = $true
-            BindSecondaries    = $false
-            StrictFileParsing  = $false
+            DnsServer            = 'localhost'
+            DisjointNets         = $false
+            NoForwarderRecursion = $true
+            LogLevel             = 50393905
         }
     }
 }
