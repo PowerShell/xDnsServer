@@ -5,4 +5,5 @@ ConvertFrom-StringData @'
     EvaluatingDnsServerSettings  = Evaluating the DNS Server settings.
     PropertyInDesiredState       = The property '{0}' is already in desired state.
     SettingsInDesiredState       = The DNS Server settings are in desired state.
+    UnableToParseTimeSpan        = Could not parse the value '{0}' of the property '{1}'.
 '@

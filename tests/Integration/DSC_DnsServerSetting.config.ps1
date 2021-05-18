@@ -21,18 +21,15 @@ $ConfigurationData = @{
             BindSecondaries           = $false
             BootMethod                = 3
             DisableAutoReverseZone    = $false
-            DisjointNets              = $false
-            EnableDirectoryPartitions = $true
+            EnableDirectoryPartitions = $false
             EnableDnsSec              = 1
             ForwardDelegations        = 0
-            IsSlave                   = $false
             <#
                 At least one of the listening IP addresses that is specified must
                 be present on a network interface on the host running the test.
             #>
             ListeningIPAddress        = @($firstIpAddress, '10.0.0.10')
             LocalNetPriority          = $true
-            LogLevel                  = 0
             LooseWildcarding          = $false
             NameCheckFlag             = 2
             RoundRobin                = $true
@@ -64,14 +61,11 @@ Configuration DSC_DnsServerSetting_SetSettings_config
             BindSecondaries           = $Node.BindSecondaries
             BootMethod                = $Node.BootMethod
             DisableAutoReverseZone    = $Node.DisableAutoReverseZone
-            #DisjointNets              = $Node.DisjointNets
             EnableDirectoryPartitions = $Node.EnableDirectoryPartitions
             EnableDnsSec              = $Node.EnableDnsSec
             ForwardDelegations        = $Node.ForwardDelegations
-            #IsSlave                   = $Node.IsSlave
             ListeningIPAddress        = $Node.ListeningIPAddress
             LocalNetPriority          = $Node.LocalNetPriority
-            #LogLevel                  = $Node.LogLevel
             LooseWildcarding          = $Node.LooseWildcarding
             NameCheckFlag             = $Node.NameCheckFlag
             RoundRobin                = $Node.RoundRobin

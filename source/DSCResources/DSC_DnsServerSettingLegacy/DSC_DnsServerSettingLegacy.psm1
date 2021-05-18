@@ -14,12 +14,6 @@ $script:localizedData = Get-LocalizedData -DefaultUICulture 'en-US'
     altogether, see https://docs.microsoft.com/en-us/windows/win32/dns/microsoftdns-server.
 #>
 
-$script:classProperties = @(
-    'DisjointNets'
-    'LogLevel'
-    'IsSlave'
-)
-
 <#
     .SYNOPSIS
         Returns the current state of the DNS server settings.
@@ -47,7 +41,13 @@ function Get-TargetResource
 
     $returnValue = @{}
 
-    foreach ($property in $script:classProperties)
+    $classProperties = @(
+        'DisjointNets'
+        'LogLevel'
+        'IsSlave'
+    )
+
+    foreach ($property in $classProperties)
     {
         $propertyName = $property
 

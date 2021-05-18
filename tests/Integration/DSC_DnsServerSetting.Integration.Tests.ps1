@@ -76,7 +76,6 @@ try
                 $resourceCurrentState.EnableDnsSec               | Should -Be $ConfigurationData.AllNodes.EnableDnsSec
                 $resourceCurrentState.ForwardDelegations         | Should -Be $ConfigurationData.AllNodes.ForwardDelegations
                 $resourceCurrentState.LocalNetPriority           | Should -Be $ConfigurationData.AllNodes.LocalNetPriority
-                $resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
                 $resourceCurrentState.LooseWildcarding           | Should -Be $ConfigurationData.AllNodes.LooseWildcarding
                 $resourceCurrentState.NameCheckFlag              | Should -Be $ConfigurationData.AllNodes.NameCheckFlag
                 $resourceCurrentState.RoundRobin                 | Should -Be $ConfigurationData.AllNodes.RoundRobin
@@ -90,12 +89,6 @@ try
                 # these two did not set to the same value
                 $resourceCurrentState.EnableDirectoryPartitions  | Should -Be $ConfigurationData.AllNodes.EnableDirectoryPartitions
                 $resourceCurrentState.ListeningIPAddress         | Should -Be $ConfigurationData.AllNodes.ListeningIPAddress
-
-                # These does not exist in Get-DnsServerSetting https://docs.microsoft.com/en-us/powershell/module/dnsserver/get-dnsserversetting?view=win10-ps,
-                # might need to keep from the CIM class https://docs.microsoft.com/en-us/windows/win32/dns/microsoftdns-server
-                #$resourceCurrentState.DisjointNets               | Should -Be $ConfigurationData.AllNodes.DisjointNets
-                #$resourceCurrentState.IsSlave                    | Should -Be $ConfigurationData.AllNodes.IsSlave
-                #$resourceCurrentState.LogLevel                   | Should -Be $ConfigurationData.AllNodes.LogLevel
             }
 
             It 'Should return ''True'' when Test-DscConfiguration is run' {
