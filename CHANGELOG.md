@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     properties `Enable`, `RetryInterval`, and `Timeout` respectively.
   - BREAKING CHANGE: A few properties that are not supported by any DNS
     Server PowerShell cmdlet was moved to the new resource _DnsServerSettingLegacy_.
+  - BREAKING CHANGE: The properties `DsPollingInterval` and `DsTombstoneInterval`
+    has been removed ([issue #252](https://github.com/dsccommunity/DnsServerDsc/issues/252)).
+    Use the resource _DnsServerDsSetting_ to enforce these properties.
 
 - ResourceBase
   - For the method `Get()` the overload that took a `[Microsoft.Management.Infrastructure.CimInstance]`
