@@ -50,7 +50,7 @@ Configuration DnsServerSettingLegacy_RemoteNode_Config
         {
             DisjointNets         = $false
             NoForwarderRecursion = $true
-            LogLevel
+            LogLevel             = 50393905
         }
     }
 }

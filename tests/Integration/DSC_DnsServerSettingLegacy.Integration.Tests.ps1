@@ -67,7 +67,7 @@ try
 
                 $resourceCurrentState.DnsServer            | Should -Be $ConfigurationData.AllNodes.DnsServer
                 $resourceCurrentState.DisjointNets         | Should -Be $ConfigurationData.AllNodes.DisjointNets
-                $resourceCurrentState.NoForwarderRecursion | Should -Be $ConfigurationData.AllNodes.IsSlave
+                $resourceCurrentState.NoForwarderRecursion | Should -Be $ConfigurationData.AllNodes.NoForwarderRecursion
                 $resourceCurrentState.LogLevel             | Should -Be $ConfigurationData.AllNodes.LogLevel
             }
 
