@@ -141,8 +141,8 @@ class ResourceBase
     #>
     hidden [System.Collections.Hashtable[]] Compare()
     {
-        $currentState = $this.Get() | ConvertTo-HashTableFromObject
-        $desiredState = $this | ConvertTo-HashTableFromObject
+        $currentState = $this.Get() | ConvertFrom-DscResourceInstance
+        $desiredState = $this | ConvertFrom-DscResourceInstance
 
         <#
             Remove properties that have $null as the value, and remove read

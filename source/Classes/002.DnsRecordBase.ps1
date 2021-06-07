@@ -151,8 +151,8 @@ class DnsRecordBase : ResourcePropertiesBase
         {
             if ($null -ne $existingRecord)
             {
-                $currentState = $this.Get() | ConvertTo-HashTableFromObject
-                $desiredState = $this | ConvertTo-HashTableFromObject
+                $currentState = $this.Get() | ConvertFrom-DscResourceInstance
+                $desiredState = $this | ConvertFrom-DscResourceInstance
 
                 # Remove properties that have $null as the value
                 @($desiredState.Keys) | ForEach-Object -Process {
@@ -196,8 +196,8 @@ class DnsRecordBase : ResourcePropertiesBase
     {
         $isInDesiredState = $true
 
-        $currentState = $this.Get() | ConvertTo-HashTableFromObject
-        $desiredState = $this | ConvertTo-HashTableFromObject
+        $currentState = $this.Get() | ConvertFrom-DscResourceInstance
+        $desiredState = $this | ConvertFrom-DscResourceInstance
 
         if ($this.Ensure -eq 'Present')
         {

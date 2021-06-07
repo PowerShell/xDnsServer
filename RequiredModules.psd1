@@ -22,5 +22,10 @@
     'DscResource.DocGenerator'  = 'latest'
 
     # Build dependent modules
-    'DscResource.Common'        = 'latest'
+    'DscResource.Common' = @{
+        Version = 'latest'
+        Parameters = @{
+            AllowPrerelease = $true
+        }
+    }
 }
